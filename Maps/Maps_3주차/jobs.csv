@@ -4,3 +4,6 @@ id,start,due_date,machine,pt_Machine 0,pt_Machine 1,weight
 3,0,41,Machine 0,32,49,8
 4,51,22,Machine 1,42,40,8
 5,0,26,Machine 1,55,32,7
+git add "Maps/Maps_2주차/main_new.py"
+git add "Maps/Maps_2주차/milp_new.py"
+git add "Maps/Maps_2주차/module_new.py"
