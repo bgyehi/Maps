@@ -2,7 +2,7 @@ from module import *
 from docplex.mp.model import Model
 from ortools.linear_solver import pywraplp
 import numpy as np
-from pulp import LpProblem, LpMinimize, LpVariable, lpSum, getSolver
+# pulp import LpProblem, LpMinimize, LpVariable, lpSum, getSolver
 # import gurobipy as grb
 
 def milp_scheduling(_prob:Instance, time_limit=300, init_sol: Schedule = None):
