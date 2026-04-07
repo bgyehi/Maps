@@ -1,0 +1,261 @@
+{
+  "numJob": 5,
+  "numMch": 2,
+  "jobs": [
+    {
+      "ID": 0,
+      "due": 26,
+      "weight": 2,
+      "family": null,
+      "complete": false,
+      "start": -1,
+      "end": -1,
+      "assignedMch": -1,
+      "priority": 0
+    },
+    {
+      "ID": 1,
+      "due": 20,
+      "weight": 1,
+      "family": null,
+      "complete": false,
+      "start": -1,
+      "end": -1,
+      "assignedMch": -1,
+      "priority": 0
+    },
+    {
+      "ID": 2,
+      "due": 41,
+      "weight": 8,
+      "family": null,
+      "complete": false,
+      "start": -1,
+      "end": -1,
+      "assignedMch": -1,
+      "priority": 0
+    },
+    {
+      "ID": 3,
+      "due": 22,
+      "weight": 8,
+      "family": null,
+      "complete": false,
+      "start": -1,
+      "end": -1,
+      "assignedMch": -1,
+      "priority": 0
+    },
+    {
+      "ID": 4,
+      "due": 26,
+      "weight": 7,
+      "family": null,
+      "complete": false,
+      "start": -1,
+      "end": -1,
+      "assignedMch": -1,
+      "priority": 0
+    }
+  ],
+  "machines": [
+    {
+      "ID": 0,
+      "available": 0,
+      "assigned": [],
+      "setup": [
+        [
+          0,
+          23,
+          65,
+          75,
+          26
+        ],
+        [
+          62,
+          0,
+          30,
+          38,
+          19
+        ],
+        [
+          50,
+          84,
+          0,
+          52,
+          18
+        ],
+        [
+          41,
+          89,
+          73,
+          0,
+          52
+        ],
+        [
+          85,
+          14,
+          50,
+          71,
+          0
+        ]
+      ],
+      "ptime": [
+        57,
+        50,
+        32,
+        42,
+        55
+      ],
+      "schedules": [],
+      "priority": 0
+    },
+    {
+      "ID": 1,
+      "available": 0,
+      "assigned": [],
+      "setup": [
+        [
+          0,
+          45,
+          50,
+          26,
+          81
+        ],
+        [
+          68,
+          0,
+          75,
+          55,
+          88
+        ],
+        [
+          22,
+          38,
+          0,
+          45,
+          78
+        ],
+        [
+          81,
+          34,
+          83,
+          0,
+          38
+        ],
+        [
+          20,
+          44,
+          25,
+          19,
+          0
+        ]
+      ],
+      "ptime": [
+        40,
+        53,
+        49,
+        40,
+        32
+      ],
+      "schedules": [],
+      "priority": 0
+    }
+  ],
+  "ptime": [
+    [
+      57,
+      50,
+      32,
+      42,
+      55
+    ],
+    [
+      40,
+      53,
+      49,
+      40,
+      32
+    ]
+  ],
+  "setup": [
+    [
+      [
+        0,
+        23,
+        65,
+        75,
+        26
+      ],
+      [
+        62,
+        0,
+        30,
+        38,
+        19
+      ],
+      [
+        50,
+        84,
+        0,
+        52,
+        18
+      ],
+      [
+        41,
+        89,
+        73,
+        0,
+        52
+      ],
+      [
+        85,
+        14,
+        50,
+        71,
+        0
+      ]
+    ],
+    [
+      [
+        0,
+        45,
+        50,
+        26,
+        81
+      ],
+      [
+        68,
+        0,
+        75,
+        55,
+        88
+      ],
+      [
+        22,
+        38,
+        0,
+        45,
+        78
+      ],
+      [
+        81,
+        34,
+        83,
+        0,
+        38
+      ],
+      [
+        20,
+        44,
+        25,
+        19,
+        0
+      ]
+    ]
+  ],
+  "with_setup": true,
+  "family_setup": false,
+  "objective": "wT",
+  "identical_mch": false
+}

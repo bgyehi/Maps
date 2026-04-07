@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gantt Chart with Machine-Dependent Setup & Processing Times</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #fafafa;
+    margin: 0;
+    padding: 20px;
+  }
+
+  #buttons {
+    margin-bottom: 20px;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    background: #007aff;
+    color: #fff;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #005ecc;
+  }
+
+  .axis line, .axis path {
+    stroke: #ccc;
+  }
+
+  .bar {
+    cursor: move;
+    stroke: #666;
+    stroke-width: 1px;
+    transition: stroke-width 0.2s, stroke 0.2s;
+  }
+  .bar:hover {
+    stroke-width: 2px;
+    stroke: #333;
+  }
+  .bar.highlight {
+    stroke: #007aff;
+    stroke-width: 2px;
+  }
+
+  .job-label {
+    fill: #000;
+    font-size: 12px;
+    text-anchor: middle;
+    alignment-baseline: central;
+    pointer-events: none;
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    text-anchor: middle;
+    fill: #333;
+  }
+
+  .tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-weight: 400;
+  }
+
+  .due-label {
+    fill: red;
+    font-size: 10px;
+    text-anchor: middle;
+    font-weight: 500;
+  }
+
+  .setup-line {
+    stroke: #aaa;
+    stroke-width: 2;
+    stroke-dasharray: 2,2;
+  }
+
+  #gantt {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+</style>
+</head>
+<body>
+<div id="buttons">
+  <button id="saveJobsBtn">Save Jobs CSV</button>
+  <button id="saveSetupBtn">Save Setup CSV</button>
+  <button id="loadJobsBtn">Load Jobs CSV</button>
+  <button id="loadSetupBtn">Load Setup CSV</button>
+  <input type="file" id="jobsFileInput" accept=".csv" style="display:none" />
+  <input type="file" id="setupFileInput" accept=".csv" style="display:none" />
+</div>
+
+<svg id="gantt"></svg>
+<div id="tooltip" class="tooltip"></div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ============================================================
+//  Gantt with MACHINE-DEPENDENT processing times & setup times
+//  - processingTimes: { [jobId]: { [machine]: number } }
+//  - setupTimes:      { [machine]: { [fromJobId]: { [toJobId]: number } } }
+//  CSV formats:
+//    Jobs CSV header:
+//      id,start,due_date,color,machine,pt_<Machine A>,pt_<Machine B>,...
+//    Setup CSV header:
+//      machine,id,job1,job2,... (repeat rows for each machine × row-job)
+// ============================================================
+
+// ------------------- INITIAL SAMPLE DATA -------------------
+const machines = ["Machine 0", "Machine 1"];
+
+// Define jobs (note: processing times now live in processingTimes)
+let jobs = [
+  {
+    "id": 1,
+    "machine": "Machine 0",
+    "start": 82,
+    "due_date": 26,
+    "color": "#A8D8EA",
+    "weight": 2
+  },
+  {
+    "id": 2,
+    "machine": "Machine 1",
+    "start": 125,
+    "due_date": 20,
+    "color": "#FFEAA7",
+    "weight": 1
+  },
+  {
+    "id": 3,
+    "machine": "Machine 0",
+    "start": 0,
+    "due_date": 41,
+    "color": "#C3FBD8",
+    "weight": 8
+  },
+  {
+    "id": 4,
+    "machine": "Machine 1",
+    "start": 51,
+    "due_date": 22,
+    "color": "#D4C1EC",
+    "weight": 8
+  },
+  {
+    "id": 5,
+    "machine": "Machine 1",
+    "start": 0,
+    "due_date": 26,
+    "color": "#FFD6E0",
+    "weight": 7
+  }
+];
+
+// Per-(job,machine) processing times
+let processingTimes = {
+  "1": {
+    "Machine 0": 57,
+    "Machine 1": 40
+  },
+  "2": {
+    "Machine 0": 50,
+    "Machine 1": 53
+  },
+  "3": {
+    "Machine 0": 32,
+    "Machine 1": 49
+  },
+  "4": {
+    "Machine 0": 42,
+    "Machine 1": 40
+  },
+  "5": {
+    "Machine 0": 55,
+    "Machine 1": 32
+  }
+};
+
+// Machine-dependent (fromJob -> toJob) setup times
+let setupTimes = {
+  "Machine 0": {
+    "1": {
+      "1": 0,
+      "2": 23,
+      "3": 65,
+      "4": 75,
+      "5": 26
+    },
+    "2": {
+      "1": 62,
+      "2": 0,
+      "3": 30,
+      "4": 38,
+      "5": 19
+    },
+    "3": {
+      "1": 50,
+      "2": 84,
+      "3": 0,
+      "4": 52,
+      "5": 18
+    },
+    "4": {
+      "1": 41,
+      "2": 89,
+      "3": 73,
+      "4": 0,
+      "5": 52
+    },
+    "5": {
+      "1": 85,
+      "2": 14,
+      "3": 50,
+      "4": 71,
+      "5": 0
+    }
+  },
+  "Machine 1": {
+    "1": {
+      "1": 0,
+      "2": 45,
+      "3": 50,
+      "4": 26,
+      "5": 81
+    },
+    "2": {
+      "1": 68,
+      "2": 0,
+      "3": 75,
+      "4": 55,
+      "5": 88
+    },
+    "3": {
+      "1": 22,
+      "2": 38,
+      "3": 0,
+      "4": 45,
+      "5": 78
+    },
+    "4": {
+      "1": 81,
+      "2": 34,
+      "3": 83,
+      "4": 0,
+      "5": 38
+    },
+    "5": {
+      "1": 20,
+      "2": 44,
+      "3": 25,
+      "4": 19,
+      "5": 0
+    }
+  }
+};
+
+
+// ------------------- SCALES & SVG -------------------
+const margin = { top: 50, right: 50, bottom: 50, left: 120 };
+const width = 900;
+const height = 420;
+const barHeightRatio = 0.8;
+
+const svg = d3.select("#gantt").attr("width", width).attr("height", height);
+const tooltip = d3.select("#tooltip");
+
+// Utilities for processing time & end time
+function getProcTime(job, machine) {
+  const jpt = processingTimes[job.id] || {};
+  const pt = jpt[machine];
+  if (pt == null) {
+    // Fallback: average of defined PTs or 0
+    const vals = Object.values(jpt).filter(v => Number.isFinite(v));
+    return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+  }
+  return pt;
+}
+
+function getEnd(job) {
+  return job.start + getProcTime(job, job.machine);
+}
+
+function computeTardiness(job) {
+  const completion = getEnd(job);
+  return Math.max(0, completion - job.due_date);
+}
+function computeWeightedTardiness(job) {
+  return job.weight * computeTardiness(job);
+}
+
+function getAllDays(jobsArr) {
+  return jobsArr.flatMap(d => [d.start, getEnd(d)]);
+}
+
+const xScale = d3.scaleLinear().range([margin.left, width - margin.right]);
+const yScale = d3.scaleBand().domain(machines).range([margin.top, height - margin.bottom]).padding(0.1);
+
+function updateXDomain() {
+  const allD = getAllDays(jobs);
+  let minD = d3.min(allD);
+  let maxD = d3.max(allD);
+  minD = Math.min(minD, 0);
+  minD = Math.max(0, minD - 1);
+  maxD = maxD + 1;
+  xScale.domain([minD, maxD]);
+}
+updateXDomain();
+
+const xAxis = d3.axisBottom(xScale).tickFormat(d => "Day " + d);
+const yAxis = d3.axisLeft(yScale);
+
+const xAxisG = svg.append("g").attr("class", "x axis").attr("transform", `translate(0, ${height - margin.bottom})`).call(xAxis);
+const yAxisG = svg.append("g").attr("class", "y axis").attr("transform", `translate(${margin.left},0)`).call(yAxis);
+
+// Title for total tardiness
+const title = svg.append("text").attr("class", "title").attr("x", (width / 2)).attr("y", margin.top / 2);
+function updateTotalTardiness() {
+  const total = d3.sum(jobs, computeWeightedTardiness);
+  title.text(`Total Weighted Tardiness: ${total}`);
+}
+
+
+// Mark each job's due date on the axis as "Job X Due"
+function renderDueDateLabels() {
+  svg.selectAll(".due-label").remove();
+  const dueGroups = d3.group(jobs, d => d.due_date);
+  dueGroups.forEach((jobsForDay, dueDay) => {
+    const xPos = xScale(dueDay);
+    jobsForDay.forEach((job, i) => {
+      svg.append("text").attr("class", "due-label").attr("x", xPos).attr("y", height - margin.bottom + 30 + i*12).text(`Job ${job.id} Due`);
+    });
+  });
+}
+
+function getSetupTime(machine, prevJobId, nextJobId) {
+  const m = setupTimes[machine] || {};
+  const row = m[prevJobId] || {};
+  return row[nextJobId] != null ? row[nextJobId] : 0;
+}
+
+// Apply sequence-dependent constraints per machine with machine-dependent setup
+function applyConstraintsOnMachine(machine) {
+  const machineJobs = jobs.filter(j => j.machine === machine).sort((a,b) => a.start - b.start);
+  for (let i = 1; i < machineJobs.length; i++) {
+    const prev = machineJobs[i-1];
+    const curr = machineJobs[i];
+    const st = getSetupTime(machine, prev.id, curr.id);
+    const earliestStart = getEnd(prev) + st;
+    if (curr.start < earliestStart) {
+      curr.start = earliestStart;
+    }
+  }
+}
+
+function resolveAllConstraints() {
+  machines.forEach(m => applyConstraintsOnMachine(m));
+  machines.forEach(m => applyConstraintsOnMachine(m)); // re-pass just in case
+}
+
+// Snap to closest day (>=0)
+function snapXToDay(xCoord) {
+  const day = xScale.invert(xCoord);
+  return Math.max(0, Math.round(day));
+}
+
+function renderJobs() {
+  updateXDomain();
+  xAxisG.call(xAxis);
+  renderDueDateLabels();
+
+  // Remove old setup lines
+  svg.selectAll(".setup-line").remove();
+
+  const barHeight = yScale.bandwidth() * barHeightRatio;
+  const jobGroups = svg.selectAll(".job-group").data(jobs, d => d.id);
+
+  const enter = jobGroups.enter().append("g").attr("class", "job-group");
+  enter.append("rect").attr("class", "bar");
+  enter.append("text").attr("class", "job-label");
+
+  const merged = jobGroups.merge(enter).attr("transform", d => `translate(${xScale(d.start)}, ${yScale(d.machine) + (yScale.bandwidth()-barHeight)/2})`);
+
+  merged.select("rect")
+    .attr("width", d => xScale(getEnd(d)) - xScale(d.start))
+    .attr("height", barHeight)
+    .attr("fill", d => d.color)
+    .on("click", function(event, d) {
+      const due = d.due_date;
+      const tardiness = computeTardiness(d);
+      const pt = getProcTime(d, d.machine);
+      tooltip.html(`Job ${d.id}<br>Machine: ${d.machine}<br>Proc. time: ${pt}<br>Due: Day ${due}<br>Tardiness: ${tardiness}`)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 20) + "px")
+        .style("opacity", 1);
+      d3.select("body").on("click.tooltip", function(ev) {
+        if (ev.target.tagName !== 'rect') { tooltip.style("opacity", 0); d3.select("body").on("click.tooltip", null); }
+      }, {capture: true});
+    });
+
+  merged.select("text")
+    .attr("x", d => (xScale(getEnd(d)) - xScale(d.start))/2)
+    .attr("y", barHeight/2)
+    .text(d => d.id);
+
+  jobGroups.exit().remove();
+
+  drawSetupLines();
+  return merged;
+}
+
+function drawSetupLines() {
+  machines.forEach(m => {
+    const machineJobs = jobs.filter(j => j.machine === m).sort((a,b) => a.start - b.start);
+    const barHeight = yScale.bandwidth() * barHeightRatio;
+    for (let i = 1; i < machineJobs.length; i++) {
+      const prev = machineJobs[i-1];
+      const curr = machineJobs[i];
+      const prevEnd = xScale(getEnd(prev));
+      const currStart = xScale(curr.start);
+      const machineY = yScale(m) + yScale.bandwidth()/2;
+      if (currStart > prevEnd) {
+        svg.append("line").attr("class", "setup-line").attr("x1", prevEnd).attr("y1", machineY).attr("x2", currStart).attr("y2", machineY);
+      }
+    }
+  });
+}
+
+resolveAllConstraints();
+let jobGroups = renderJobs();
+updateTotalTardiness();
+// Drag behavior
+const drag = d3.drag()
+  .on("start", function(event, d) {
+    d3.select(this).select("rect").classed("highlight", true);
+  })
+  .on("drag", function(event, d) {
+    const dx = event.x;
+    const dy = event.y;
+    // Find closest machine track
+    let closestMachine = d.machine;
+    let minDist = Infinity;
+    for (let m of machines) {
+      const mCenter = yScale(m) + yScale.bandwidth()/2;
+      const dist = Math.abs(dy - mCenter);
+      if (dist < minDist) { minDist = dist; closestMachine = m; }
+    }
+    d3.select(this).attr("transform", `translate(${dx},${yScale(closestMachine) + (yScale.bandwidth()*(1-barHeightRatio)/2)})`);
+  })
+  .on("end", function(event, d) {
+    d3.select(this).select("rect").classed("highlight", false);
+    const finalTransform = d3.select(this).attr("transform");
+    const matches = /translate\(([^,]+),([^)]+)\)/.exec(finalTransform);
+    const finalX = parseFloat(matches[1]);
+    const finalY = parseFloat(matches[2]);
+
+    // Snap horizontally
+    let snappedDay = snapXToDay(finalX);
+
+    // Determine chosen machine by Y position
+    let chosenMachine = d.machine;
+    for (let m of machines) {
+      const mPos = yScale(m) + (yScale.bandwidth()*(1-barHeightRatio)/2);
+      if (Math.abs(finalY - mPos) < yScale.bandwidth()/2) { chosenMachine = m; break; }
+    }
+
+    // Update job
+    d.start = snappedDay;
+    d.machine = chosenMachine;
+
+    // Resolve constraints and re-render
+    resolveAllConstraints();
+    jobGroups = renderJobs();
+    updateTotalTardiness();
+    jobGroups.call(drag);
+  });
+
+jobGroups.call(drag);
+
+// ------------------- CSV SAVE/LOAD FUNCTIONS -------------------
+const saveJobsBtn   = document.getElementById("saveJobsBtn");
+const saveSetupBtn  = document.getElementById("saveSetupBtn");
+const loadJobsBtn   = document.getElementById("loadJobsBtn");
+const loadSetupBtn  = document.getElementById("loadSetupBtn");
+const jobsFileInput = document.getElementById("jobsFileInput");
+const setupFileInput= document.getElementById("setupFileInput");
+
+saveJobsBtn.addEventListener("click", saveJobsCSV);
+saveSetupBtn.addEventListener("click", saveSetupCSV);
+loadJobsBtn.addEventListener("click", () => jobsFileInput.click());
+jobsFileInput.addEventListener("change", loadJobsFromFile);
+loadSetupBtn.addEventListener("click", () => setupFileInput.click());
+setupFileInput.addEventListener("change", loadSetupFromFile);
+
+function saveJobsCSV() {
+  // Header: id,start,due_date,color,machine,pt_<machine1>,pt_<machine2>,...
+  const ptHeaders = machines.map(m => `pt_${m}`);
+  let csv = ["id","start","due_date","color","machine",...ptHeaders].join(",") + "\n";
+  const sortedJobs = [...jobs].sort((a,b)=>a.id-b.id);
+  sortedJobs.forEach(job => {
+    const ptRow = machines.map(m => (processingTimes[job.id] && processingTimes[job.id][m] != null) ? processingTimes[job.id][m] : "");
+    csv += [job.id, job.start, job.due_date, job.color, job.machine, ...ptRow].join(",") + "\n";
+  });
+  downloadCSV(csv, "jobs.csv");
+}
+
+function saveSetupCSV() {
+  // Header: machine,id,job1,job2,... (job columns are sorted by job id)
+  const jobIds = [...new Set(jobs.map(j=>j.id))].sort((a,b)=>a-b);
+  let csv = ["machine","id", ...jobIds.map(j=>`job${j}`)].join(",") + "\n";
+  machines.forEach(m => {
+    jobIds.forEach(rowId => {
+      const row = jobIds.map(colId => (setupTimes[m] && setupTimes[m][rowId] && setupTimes[m][rowId][colId] != null) ? setupTimes[m][rowId][colId] : 0);
+      csv += [m, rowId, ...row].join(",") + "\n";
+    });
+  });
+  downloadCSV(csv, "setup_times.csv");
+}
+
+function downloadCSV(csv, filename) {
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadJobsFromFile(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => { loadJobsCSV(event.target.result); e.target.value = ""; };
+  reader.readAsText(file);
+}
+
+function loadSetupFromFile(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => { loadSetupCSV(event.target.result); e.target.value = ""; };
+  reader.readAsText(file);
+}
+
+function loadJobsCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  const header = lines.shift().split(",");
+
+  // Expected to include: id,start,due_date,color,machine,pt_<M1>,...
+  const baseExpected = ["id","start","due_date","color","machine"]; // processing times follow
+  const missing = baseExpected.filter(h => !header.includes(h));
+  if (missing.length) { alert("Jobs CSV missing columns: " + missing.join(", ")); return; }
+
+  // Determine machine pt columns present in CSV. If not present, fallback to legacy 'processing_time'
+  const ptCols = header.filter(h => h.startsWith("pt_"));
+  const hasLegacyPT = header.includes("processing_time");
+
+  const newJobs = [];
+  const newPT   = {};
+
+  lines.forEach(line => {
+    if (!line.trim()) return;
+    const parts = splitCSVLine(line, header.length);
+    const job = {
+      id: +parts[header.indexOf("id")],
+      start: +parts[header.indexOf("start")],
+      due_date: +parts[header.indexOf("due_date")],
+      color: parts[header.indexOf("color")],
+      machine: parts[header.indexOf("machine")],
+    };
+    newJobs.push(job);
+
+    // Build per-machine PT
+    const jid = job.id;
+    newPT[jid] = newPT[jid] || {};
+    if (ptCols.length) {
+      ptCols.forEach(col => {
+        const m = col.replace(/^pt_/, "");
+        const v = parts[header.indexOf(col)];
+        if (v !== undefined && v !== "") newPT[jid][m] = +v;
+      });
+    } else if (hasLegacyPT) {
+      // If only a single processing_time is provided, copy it across all machines
+      const v = +parts[header.indexOf("processing_time")];
+      machines.forEach(m => { newPT[jid][m] = v; });
+    } else {
+      // If nothing provided, default to 0s
+      machines.forEach(m => { newPT[jid][m] = 0; });
+    }
+  });
+
+  jobs = newJobs;
+  processingTimes = newPT;
+  resolveAllConstraints();
+  jobGroups = renderJobs();
+  updateTotalTardiness();
+  jobGroups.call(drag);
+}
+
+function loadSetupCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  const header = lines.shift().split(",");
+  // header like: machine,id,job1,job2,...
+  if (header[0] !== "machine" || header[1] !== "id") { alert("Setup CSV first two columns must be 'machine,id'."); return; }
+  const jobHeaders = header.slice(2).map(h => parseInt(h.replace(/^job/,"")));
+  if (jobHeaders.some(isNaN)) { alert("Setup CSV invalid job headers."); return; }
+
+  const newSetup = {};
+
+  lines.forEach(line => {
+    if (!line.trim()) return;
+    const parts = splitCSVLine(line, header.length);
+    const machine = parts[0];
+    const rowId = +parts[1];
+    if (!newSetup[machine]) newSetup[machine] = {};
+    if (!newSetup[machine][rowId]) newSetup[machine][rowId] = {};
+    for (let i = 2; i < parts.length; i++) {
+      const colId = jobHeaders[i-2];
+      newSetup[machine][rowId][colId] = +parts[i];
+    }
+  });
+
+  // Fill missing machines/entries with zeros to be safe
+  machines.forEach(m => {
+    newSetup[m] = newSetup[m] || {};
+    const allJobIds = [...new Set(jobs.map(j=>j.id))];
+    allJobIds.forEach(r => {
+      newSetup[m][r] = newSetup[m][r] || {};
+      allJobIds.forEach(c => { if (newSetup[m][r][c] == null) newSetup[m][r][c] = 0; });
+    });
+  });
+
+  setupTimes = newSetup;
+  resolveAllConstraints();
+  jobGroups = renderJobs();
+  updateTotalTardiness();
+  jobGroups.call(drag);
+}
+
+// --- Helper to split CSV line that may contain commas in values (simple handling) ---
+function splitCSVLine(line, expectedLen) {
+  // Basic split (no embedded quotes in our simple use), but keep trailing empties
+  const parts = line.split(",");
+  while (parts.length < expectedLen) parts.push("");
+  return parts;
+}
+
+</script>
+</body>
+</html>
