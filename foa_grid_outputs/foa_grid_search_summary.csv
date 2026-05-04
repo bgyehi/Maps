@@ -1,0 +1,4 @@
+﻿num_job,num_mch,ga_obj,ga_time,best_foa_mean_obj,best_foa_best_run_obj,best_foa_pop_size,best_foa_step_size,best_foa_restart_ratio,best_foa_seed,ga_schedule_path,best_foa_schedule_path
+10,2,4083,60.0086350440979,3899.8,3892,10,0.3,0.2,1000,foa_grid_outputs\ga_schedule_job_10.png,foa_grid_outputs\best_foa_schedule_job_10.png
+50,2,140820,60.01425123214722,168221.5,160427,50,0.3,0.3,1007,foa_grid_outputs\ga_schedule_job_50.png,foa_grid_outputs\best_foa_schedule_job_50.png
+100,2,681579,60.61013054847717,820782.6,782418,10,0.3,0.2,1005,foa_grid_outputs\ga_schedule_job_100.png,foa_grid_outputs\best_foa_schedule_job_100.png

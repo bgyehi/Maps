@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_da5b729d80f6414adf66f4ab7efa2fe5 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 980px;
+        max-height: 430px;
+        overflow-y: auto;
+        background-color: white;
+        z-index: 9999;
+        border: 2px solid #444;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 12px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.35);
+    ">
+        <h3 style="margin-top: 0;">Vehicle Schedule & Utilization</h3>
+
+        <h4>1. Vehicle Utilization</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Main route</th>
+                    <th>Weight utilization</th>
+                    <th>Charge utilization</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td><b>Vehicle 0</b></td>
+                <td>Depot -> C1 -> C4 -> C7 -> Depot</td>
+                <td>10.0 / 10.0
+                    (100.0%)</td>
+                <td>16.0 / 18.0
+                    (88.9%)</td>
+            </tr>
+            
+            <tr>
+                <td><b>Vehicle 1</b></td>
+                <td>Depot -> C6 -> C5 -> Depot</td>
+                <td>5.0 / 10.0
+                    (50.0%)</td>
+                <td>15.0 / 18.0
+                    (83.3%)</td>
+            </tr>
+            
+            <tr>
+                <td><b>Vehicle 2</b></td>
+                <td>Depot -> C2 -> C8 -> C3 -> Depot</td>
+                <td>6.0 / 10.0
+                    (60.0%)</td>
+                <td>17.0 / 18.0
+                    (94.4%)</td>
+            </tr>
+            
+            </tbody>
+        </table>
+
+        <h4>2. Vehicle Schedule</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Order</th>
+                    <th>Node</th>
+                    <th>Type</th>
+                    <th>Arrival</th>
+                    <th>Service</th>
+                    <th>Delivery tour</th>
+                    <th>Departure</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>0</td>
+                    <td>Depot</td>
+                    <td>Depot start</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>1</td>
+                    <td>C1</td>
+                    <td>Charging customer</td>
+                    <td>20.0 min</td>
+                    <td>12.0 min</td>
+                    <td>8.9 min</td>
+                    <td>40.9 min</td>
+                    <td>Delivery: C1 -> S0 -> C1</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>2</td>
+                    <td>C4</td>
+                    <td>Charging customer</td>
+                    <td>49.5 min</td>
+                    <td>15.0 min</td>
+                    <td>9.8 min</td>
+                    <td>74.3 min</td>
+                    <td>Delivery: C4 -> S3 -> C4</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>3</td>
+                    <td>C7</td>
+                    <td>Charging customer</td>
+                    <td>81.0 min</td>
+                    <td>13.0 min</td>
+                    <td>11.8 min</td>
+                    <td>105.9 min</td>
+                    <td>Delivery: C7 -> S6 -> C7</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>4</td>
+                    <td>Depot</td>
+                    <td>Depot return</td>
+                    <td>600.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>0</td>
+                    <td>Depot</td>
+                    <td>Depot start</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>1</td>
+                    <td>C6</td>
+                    <td>Charging customer</td>
+                    <td>70.0 min</td>
+                    <td>17.0 min</td>
+                    <td>7.8 min</td>
+                    <td>94.8 min</td>
+                    <td>Delivery: C6 -> S5 -> C6</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>2</td>
+                    <td>C5</td>
+                    <td>Charging customer</td>
+                    <td>102.4 min</td>
+                    <td>22.0 min</td>
+                    <td>8.3 min</td>
+                    <td>132.7 min</td>
+                    <td>Delivery: C5 -> S4 -> C5</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>3</td>
+                    <td>Depot</td>
+                    <td>Depot return</td>
+                    <td>600.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>0</td>
+                    <td>Depot</td>
+                    <td>Depot start</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>1</td>
+                    <td>C2</td>
+                    <td>Charging customer</td>
+                    <td>30.0 min</td>
+                    <td>18.0 min</td>
+                    <td>0.0 min</td>
+                    <td>48.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>2</td>
+                    <td>C8</td>
+                    <td>Charging customer</td>
+                    <td>55.3 min</td>
+                    <td>20.0 min</td>
+                    <td>0.0 min</td>
+                    <td>75.3 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>3</td>
+                    <td>C3</td>
+                    <td>Charging customer</td>
+                    <td>88.6 min</td>
+                    <td>10.0 min</td>
+                    <td>20.2 min</td>
+                    <td>118.8 min</td>
+                    <td>Delivery: C3 -> S1 -> S2 -> C3</td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>4</td>
+                    <td>Depot</td>
+                    <td>Depot return</td>
+                    <td>600.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <h4>3. Satellite Delivery Tours</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Hub</th>
+                    <th>Tour</th>
+                    <th>Weight</th>
+                    <th>Distance</th>
+                    <th>Travel time</th>
+                    <th>Service time</th>
+                    <th>Total time</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>C1</td>
+                    <td>C1 -> S0 -> C1</td>
+                    <td>2.0</td>
+                    <td>2.16 km</td>
+                    <td>4.9 min</td>
+                    <td>4.0 min</td>
+                    <td>8.9 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>C4</td>
+                    <td>C4 -> S3 -> C4</td>
+                    <td>4.0</td>
+                    <td>0.91 km</td>
+                    <td>1.8 min</td>
+                    <td>8.0 min</td>
+                    <td>9.8 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>C7</td>
+                    <td>C7 -> S6 -> C7</td>
+                    <td>4.0</td>
+                    <td>1.64 km</td>
+                    <td>2.8 min</td>
+                    <td>9.0 min</td>
+                    <td>11.8 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>C6</td>
+                    <td>C6 -> S5 -> C6</td>
+                    <td>2.0</td>
+                    <td>2.37 km</td>
+                    <td>3.8 min</td>
+                    <td>4.0 min</td>
+                    <td>7.8 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>C5</td>
+                    <td>C5 -> S4 -> C5</td>
+                    <td>3.0</td>
+                    <td>0.79 km</td>
+                    <td>1.3 min</td>
+                    <td>7.0 min</td>
+                    <td>8.3 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V2</td>
+                    <td>C3</td>
+                    <td>C3 -> S1 -> S2 -> C3</td>
+                    <td>6.0</td>
+                    <td>6.63 km</td>
+                    <td>9.2 min</td>
+                    <td>11.0 min</td>
+                    <td>20.2 min</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <p style="margin-bottom:0;">
+            <b>Legend:</b>
+            red = depot,
+            blue = charging customer,
+            lime = delivery satellite,
+            solid line = main vehicle route,
+            dashed line = satellite delivery tour.
+        </p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_da5b729d80f6414adf66f4ab7efa2fe5" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_da5b729d80f6414adf66f4ab7efa2fe5 = L.map(
+                "map_da5b729d80f6414adf66f4ab7efa2fe5",
+                {
+                    center: [37.5424625, 126.99174375],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_2594cab35cd442fcddcaca35ea1d4a03 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2594cab35cd442fcddcaca35ea1d4a03.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var marker_c1d354f153fa62f1d834920a4068f150 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 5000,
+}
+            ).addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var icon_44ab5690a2c39a4cb768f98ffc375f76 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_325e6cb39d5cf4ccbb04fd3fa65615e4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_05fb7ad39cccdbfe6da424103dbabcae = $(`<div id="html_05fb7ad39cccdbfe6da424103dbabcae" style="width: 100.0%; height: 100.0%;"><b>Depot</b></div>`)[0];
+                popup_325e6cb39d5cf4ccbb04fd3fa65615e4.setContent(html_05fb7ad39cccdbfe6da424103dbabcae);
+            
+        
+
+        marker_c1d354f153fa62f1d834920a4068f150.bindPopup(popup_325e6cb39d5cf4ccbb04fd3fa65615e4)
+        ;
+
+        
+    
+    
+            marker_c1d354f153fa62f1d834920a4068f150.bindTooltip(
+                `<div>
+                     Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c1d354f153fa62f1d834920a4068f150.setIcon(icon_44ab5690a2c39a4cb768f98ffc375f76);
+            
+    
+            var feature_group_3a96c4d850352089df99043eaaee1348 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_c441587453270dc9684d34746e44ebd1 = L.marker(
+                [37.5729, 126.9769],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_dead53192e2e2cfb0d28f327c1a18af2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3f1e756e2e4081c5cd80cb805f003677 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_49135d9048e7a26f9236768d66a7f470 = $(`<div id="html_49135d9048e7a26f9236768d66a7f470" style="width: 100.0%; height: 100.0%;"><b>Customer C1</b><br>Type: EV charging<br>Delivery satellites handled here: S0</div>`)[0];
+                popup_3f1e756e2e4081c5cd80cb805f003677.setContent(html_49135d9048e7a26f9236768d66a7f470);
+            
+        
+
+        marker_c441587453270dc9684d34746e44ebd1.bindPopup(popup_3f1e756e2e4081c5cd80cb805f003677)
+        ;
+
+        
+    
+    
+            marker_c441587453270dc9684d34746e44ebd1.bindTooltip(
+                `<div>
+                     C1 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c441587453270dc9684d34746e44ebd1.setIcon(icon_dead53192e2e2cfb0d28f327c1a18af2);
+            
+    
+            var marker_0ddd3ea6b2230f46d47ef87f2fe52d73 = L.marker(
+                [37.5663, 127.0093],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_1df1c3e203accfc26753b55c62941b04 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_86f4a4928e0e77aa6a6f408a49b5c91f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1f3a26f3e1f7ed69692cf60c9d9238af = $(`<div id="html_1f3a26f3e1f7ed69692cf60c9d9238af" style="width: 100.0%; height: 100.0%;"><b>Customer C2</b><br>Type: EV charging<br>Delivery satellites handled here: None</div>`)[0];
+                popup_86f4a4928e0e77aa6a6f408a49b5c91f.setContent(html_1f3a26f3e1f7ed69692cf60c9d9238af);
+            
+        
+
+        marker_0ddd3ea6b2230f46d47ef87f2fe52d73.bindPopup(popup_86f4a4928e0e77aa6a6f408a49b5c91f)
+        ;
+
+        
+    
+    
+            marker_0ddd3ea6b2230f46d47ef87f2fe52d73.bindTooltip(
+                `<div>
+                     C2 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0ddd3ea6b2230f46d47ef87f2fe52d73.setIcon(icon_1df1c3e203accfc26753b55c62941b04);
+            
+    
+            var marker_269c8c157a171ba2d3e267b6e25ee977 = L.marker(
+                [37.5547, 126.9706],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_c281aa3f9b8e0e29099e765b47a11452 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a3e31e25d949308dcee1b457982996cc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fb90fe84291625ba23517991d0eb45dd = $(`<div id="html_fb90fe84291625ba23517991d0eb45dd" style="width: 100.0%; height: 100.0%;"><b>Customer C3</b><br>Type: EV charging<br>Delivery satellites handled here: S1, S2</div>`)[0];
+                popup_a3e31e25d949308dcee1b457982996cc.setContent(html_fb90fe84291625ba23517991d0eb45dd);
+            
+        
+
+        marker_269c8c157a171ba2d3e267b6e25ee977.bindPopup(popup_a3e31e25d949308dcee1b457982996cc)
+        ;
+
+        
+    
+    
+            marker_269c8c157a171ba2d3e267b6e25ee977.bindTooltip(
+                `<div>
+                     C3 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_269c8c157a171ba2d3e267b6e25ee977.setIcon(icon_c281aa3f9b8e0e29099e765b47a11452);
+            
+    
+            var marker_fa5f90d772619bdc491f32e309e5111e = L.marker(
+                [37.5219, 126.9245],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_e01beae19528b1dfdc061c93e151fafa = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bad2bcb6cf2cb1d772b0838c34410bd9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_84b1cc7e13c384775026379e3cf4ba68 = $(`<div id="html_84b1cc7e13c384775026379e3cf4ba68" style="width: 100.0%; height: 100.0%;"><b>Customer C4</b><br>Type: EV charging<br>Delivery satellites handled here: S3</div>`)[0];
+                popup_bad2bcb6cf2cb1d772b0838c34410bd9.setContent(html_84b1cc7e13c384775026379e3cf4ba68);
+            
+        
+
+        marker_fa5f90d772619bdc491f32e309e5111e.bindPopup(popup_bad2bcb6cf2cb1d772b0838c34410bd9)
+        ;
+
+        
+    
+    
+            marker_fa5f90d772619bdc491f32e309e5111e.bindTooltip(
+                `<div>
+                     C4 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_fa5f90d772619bdc491f32e309e5111e.setIcon(icon_e01beae19528b1dfdc061c93e151fafa);
+            
+    
+            var marker_86fcaee1c7130b08956b34a5f17b9449 = L.marker(
+                [37.4979, 127.0276],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_9820a0cb96b8456afb64d84d267e1100 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f12e373e65488693061b9431dd0bf9e1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_92b41e74bba2601fff261d4fb89e9f32 = $(`<div id="html_92b41e74bba2601fff261d4fb89e9f32" style="width: 100.0%; height: 100.0%;"><b>Customer C5</b><br>Type: EV charging<br>Delivery satellites handled here: S4</div>`)[0];
+                popup_f12e373e65488693061b9431dd0bf9e1.setContent(html_92b41e74bba2601fff261d4fb89e9f32);
+            
+        
+
+        marker_86fcaee1c7130b08956b34a5f17b9449.bindPopup(popup_f12e373e65488693061b9431dd0bf9e1)
+        ;
+
+        
+    
+    
+            marker_86fcaee1c7130b08956b34a5f17b9449.bindTooltip(
+                `<div>
+                     C5 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_86fcaee1c7130b08956b34a5f17b9449.setIcon(icon_9820a0cb96b8456afb64d84d267e1100);
+            
+    
+            var marker_b1bd1473165fa6c710409105c0de068f = L.marker(
+                [37.5133, 127.1],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_5a6dd41036eb722dbb7b4f3f961f9f6b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5bf31cc93ca58850621c7c681137a59b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ea107c16ee1c63a0bc793c7dbca24d9a = $(`<div id="html_ea107c16ee1c63a0bc793c7dbca24d9a" style="width: 100.0%; height: 100.0%;"><b>Customer C6</b><br>Type: EV charging<br>Delivery satellites handled here: S5</div>`)[0];
+                popup_5bf31cc93ca58850621c7c681137a59b.setContent(html_ea107c16ee1c63a0bc793c7dbca24d9a);
+            
+        
+
+        marker_b1bd1473165fa6c710409105c0de068f.bindPopup(popup_5bf31cc93ca58850621c7c681137a59b)
+        ;
+
+        
+    
+    
+            marker_b1bd1473165fa6c710409105c0de068f.bindTooltip(
+                `<div>
+                     C6 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_b1bd1473165fa6c710409105c0de068f.setIcon(icon_5a6dd41036eb722dbb7b4f3f961f9f6b);
+            
+    
+            var marker_c71c663dc12e30ddd5e8bcd354b5e4a9 = L.marker(
+                [37.5563, 126.9236],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_3a42b1ade89984c0dcc764416587f221 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d3c032cda2c51d118c3a30b980e8e3ff = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d877f59f8d737ece75e941baddd4c7da = $(`<div id="html_d877f59f8d737ece75e941baddd4c7da" style="width: 100.0%; height: 100.0%;"><b>Customer C7</b><br>Type: EV charging<br>Delivery satellites handled here: S6</div>`)[0];
+                popup_d3c032cda2c51d118c3a30b980e8e3ff.setContent(html_d877f59f8d737ece75e941baddd4c7da);
+            
+        
+
+        marker_c71c663dc12e30ddd5e8bcd354b5e4a9.bindPopup(popup_d3c032cda2c51d118c3a30b980e8e3ff)
+        ;
+
+        
+    
+    
+            marker_c71c663dc12e30ddd5e8bcd354b5e4a9.bindTooltip(
+                `<div>
+                     C7 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c71c663dc12e30ddd5e8bcd354b5e4a9.setIcon(icon_3a42b1ade89984c0dcc764416587f221);
+            
+    
+            var marker_b6fde501f56ac1fbc293d415423fe72e = L.marker(
+                [37.5446, 127.0559],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_3a96c4d850352089df99043eaaee1348);
+        
+    
+            var icon_ab60f8cfc5b2661df7a773eb8a4a9f7b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_20d612a112adc5aa98567ee89bac0df8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9269d8d76ada49488069c7e9d8535d41 = $(`<div id="html_9269d8d76ada49488069c7e9d8535d41" style="width: 100.0%; height: 100.0%;"><b>Customer C8</b><br>Type: EV charging<br>Delivery satellites handled here: None</div>`)[0];
+                popup_20d612a112adc5aa98567ee89bac0df8.setContent(html_9269d8d76ada49488069c7e9d8535d41);
+            
+        
+
+        marker_b6fde501f56ac1fbc293d415423fe72e.bindPopup(popup_20d612a112adc5aa98567ee89bac0df8)
+        ;
+
+        
+    
+    
+            marker_b6fde501f56ac1fbc293d415423fe72e.bindTooltip(
+                `<div>
+                     C8 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_b6fde501f56ac1fbc293d415423fe72e.setIcon(icon_ab60f8cfc5b2661df7a773eb8a4a9f7b);
+            
+    
+            feature_group_3a96c4d850352089df99043eaaee1348.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var feature_group_ea31d54038ca9f63503ff08855a4823e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_44f71ad2a7ad8dccac1c90e30ff31298 = L.polyline(
+                [[37.567005, 126.977993], [37.567002, 126.977601], [37.567001, 126.977371], [37.567002, 126.977312], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.569406, 126.977216], [37.569612, 126.977214], [37.569818, 126.97721], [37.569995, 126.977209], [37.570049, 126.977208], [37.57014, 126.977213], [37.5702, 126.977218], [37.570242, 126.977222], [37.57028, 126.977227], [37.570412, 126.977248], [37.570467, 126.977253], [37.570486, 126.977254], [37.571439, 126.97731], [37.571599, 126.97732], [37.572586, 126.97728], [37.572722, 126.977274], [37.573125, 126.977258], [37.574121, 126.977218], [37.574446, 126.977205], [37.574934, 126.977185], [37.575064, 126.97718], [37.575114, 126.977178], [37.57519, 126.977177], [37.575281, 126.977172], [37.575257, 126.977062], [37.575161, 126.977068], [37.575063, 126.977076], [37.574933, 126.977078], [37.57489, 126.977079], [37.573541, 126.977116], [37.572904, 126.977133]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_44f71ad2a7ad8dccac1c90e30ff31298.bindTooltip(
+                `<div>
+                     Vehicle 0: Depot -> C1 (1.26 km, 2.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_9e96006b2a07117a38482d69f474fe76 = L.polyline(
+                [[37.572904, 126.977133], [37.572586, 126.977142], [37.571691, 126.977166], [37.571413, 126.977174], [37.570489, 126.977095], [37.570413, 126.977088], [37.570354, 126.977083], [37.57028, 126.977076], [37.570242, 126.977073], [37.570197, 126.97707], [37.570137, 126.977065], [37.570047, 126.977058], [37.569997, 126.977054], [37.569634, 126.977028], [37.569052, 126.977035], [37.568406, 126.977042], [37.567349, 126.977101], [37.567142, 126.977109], [37.566869, 126.977114], [37.566637, 126.977117], [37.565241, 126.977102], [37.564924, 126.977084], [37.564756, 126.97707], [37.564642, 126.977056], [37.564455, 126.976985], [37.564255, 126.976748], [37.564232, 126.976721], [37.564171, 126.976647], [37.564129, 126.976579], [37.564069, 126.976483], [37.563806, 126.976007], [37.563745, 126.97586], [37.563667, 126.975672], [37.563529, 126.975342], [37.563351, 126.974915], [37.563322, 126.974835], [37.563068, 126.974139], [37.563052, 126.974076], [37.562855, 126.973243], [37.562821, 126.973099], [37.562678, 126.972495], [37.562649, 126.972372], [37.562634, 126.971964], [37.562524, 126.971447], [37.562225, 126.970141], [37.562185, 126.969968], [37.56217, 126.969903], [37.562122, 126.969675], [37.562085, 126.969525], [37.561893, 126.968721], [37.56186, 126.968558], [37.561843, 126.968492], [37.561759, 126.968148], [37.561696, 126.967885], [37.561573, 126.967443], [37.561536, 126.967347], [37.561375, 126.966929], [37.561346, 126.966882], [37.561205, 126.966633], [37.56089, 126.966175], [37.560874, 126.966152], [37.560576, 126.965861], [37.560421, 126.965614], [37.560207, 126.965273], [37.559829, 126.96467], [37.55978, 126.964591], [37.559602, 126.964308], [37.559593, 126.964133], [37.559533, 126.964012], [37.559485, 126.963912], [37.5594, 126.963752], [37.559341, 126.96354], [37.559315, 126.963415], [37.55931, 126.963294], [37.559312, 126.963075], [37.559333, 126.96235], [37.559322, 126.962129], [37.55926, 126.961867], [37.559083, 126.961545], [37.55858, 126.9609], [37.558134, 126.960349], [37.557907, 126.960069], [37.55761, 126.959702], [37.557291, 126.959319], [37.557185, 126.959199], [37.557018, 126.958992], [37.556988, 126.958956], [37.55629, 126.95815], [37.55601, 126.9579], [37.555914, 126.95784], [37.55575, 126.957758], [37.555296, 126.957496], [37.554613, 126.957156], [37.553501, 126.956622], [37.553192, 126.956478], [37.552421, 126.956082], [37.552383, 126.956056], [37.551828, 126.955771], [37.551691, 126.955706], [37.550893, 126.955324], [37.550712, 126.955229], [37.550626, 126.955181], [37.550509, 126.955119], [37.550389, 126.955055], [37.550195, 126.954951], [37.549655, 126.954663], [37.549258, 126.954451], [37.549014, 126.954321], [37.548578, 126.954088], [37.547853, 126.953718], [37.547644, 126.953602], [37.546978, 126.953179], [37.546749, 126.953053], [37.546411, 126.952788], [37.545282, 126.952005], [37.54498, 126.951754], [37.544823, 126.951551], [37.544309, 126.95118], [37.544016, 126.951021], [37.543878, 126.950933], [37.543766, 126.950854], [37.543447, 126.950607], [37.543115, 126.950356], [37.542653, 126.949994], [37.542494, 126.949859], [37.542379, 126.949741], [37.541902, 126.949078], [37.54132, 126.948257], [37.541145, 126.948007], [37.540436, 126.94696], [37.539945, 126.94628], [37.539787, 126.946088], [37.539675, 126.945951], [37.539312, 126.945447], [37.538954, 126.944911], [37.538791, 126.944691], [37.538628, 126.94447], [37.538548, 126.944368], [37.538238, 126.943918], [37.537941, 126.943429], [37.537501, 126.942606], [37.537471, 126.942553], [37.537164, 126.942014], [37.536598, 126.941053], [37.533847, 126.936643], [37.532419, 126.934337], [37.530261, 126.930904], [37.52964, 126.929908], [37.529401, 126.929487], [37.529229, 126.929234], [37.529125, 126.929088], [37.529087, 126.92904], [37.528641, 126.928461], [37.526956, 126.925931], [37.526808, 126.925952], [37.526773, 126.925982], [37.526582, 126.926159], [37.526461, 126.926278], [37.526446, 126.926293], [37.52546, 126.927266], [37.525275, 126.927449], [37.524516, 126.928188], [37.524348, 126.928195], [37.524237, 126.928184], [37.52409, 126.928136], [37.523649, 126.927412], [37.523594, 126.927324], [37.52353, 126.927223], [37.523399, 126.927012], [37.52311, 126.92655], [37.523007, 126.926382], [37.522524, 126.925613], [37.521989, 126.92475], [37.521871, 126.924558], [37.52186, 126.92454]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_9e96006b2a07117a38482d69f474fe76.bindTooltip(
+                `<div>
+                     Vehicle 0: C1 -> C4 (8.12 km, 8.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_8f30ae2e401ed6fed897d8cd38b4294d = L.polyline(
+                [[37.52186, 126.92454], [37.521652, 126.92421], [37.521858, 126.924204], [37.521999, 126.924062], [37.522607, 126.923445], [37.522837, 126.923143], [37.523786, 126.922209], [37.525884, 126.920126], [37.526777, 126.919251], [37.527238, 126.91892], [37.527566, 126.918703], [37.527871, 126.918416], [37.528038, 126.91826], [37.528255, 126.918056], [37.528388, 126.917931], [37.528683, 126.917654], [37.528815, 126.91753], [37.529172, 126.917195], [37.529233, 126.917292], [37.529278, 126.917365], [37.52968, 126.918013], [37.529932, 126.91842], [37.530042, 126.918598], [37.530407, 126.919187], [37.530768, 126.919768], [37.531134, 126.920359], [37.53142, 126.920821], [37.531493, 126.920918], [37.531557, 126.921004], [37.531684, 126.921212], [37.531779, 126.921369], [37.531968, 126.92166], [37.532009, 126.921801], [37.532316, 126.921998], [37.532469, 126.922095], [37.538148, 126.925846], [37.54072, 126.927535], [37.542333, 126.9286], [37.543943, 126.929637], [37.544695, 126.930134], [37.545286, 126.930526], [37.5456, 126.93073], [37.545872, 126.93088], [37.546152, 126.931014], [37.546361, 126.931103], [37.546627, 126.931198], [37.546838, 126.931266], [37.547058, 126.931344], [37.547232, 126.931402], [37.547472, 126.931482], [37.547825, 126.931599], [37.548477, 126.931815], [37.549337, 126.932084], [37.55137, 126.932775], [37.551654, 126.932868], [37.55205, 126.933041], [37.552199, 126.933116], [37.552327, 126.933209], [37.552574, 126.933406], [37.55268, 126.933234], [37.552782, 126.933067], [37.55305, 126.93263], [37.553124, 126.932524], [37.553319, 126.932246], [37.553452, 126.932056], [37.553866, 126.931464], [37.55389, 126.93143], [37.554141, 126.93106], [37.55427, 126.93087], [37.554804, 126.930118], [37.554676, 126.930024], [37.554596, 126.929949], [37.554458, 126.929818], [37.554137, 126.92933], [37.553894, 126.928964], [37.553796, 126.928791], [37.553695, 126.928563], [37.553653, 126.928347], [37.553402, 126.927303], [37.553278, 126.926803], [37.553246, 126.926606], [37.55324, 126.92652], [37.553236, 126.92631], [37.553238, 126.926261], [37.553242, 126.926178], [37.553264, 126.92598], [37.553288, 126.925755], [37.55331, 126.925546], [37.553282, 126.925349], [37.553145, 126.925028], [37.553056, 126.924786], [37.552933, 126.924452], [37.552852, 126.924268], [37.552969, 126.92413], [37.553142, 126.923927], [37.553794, 126.923162], [37.554019, 126.922914], [37.554294, 126.922569], [37.55438, 126.922476], [37.554631, 126.922182], [37.554731, 126.922064], [37.555056, 126.921683], [37.55513, 126.921597], [37.555225, 126.921725], [37.555995, 126.92276], [37.556044, 126.92283], [37.556469, 126.923398]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_8f30ae2e401ed6fed897d8cd38b4294d.bindTooltip(
+                `<div>
+                     Vehicle 0: C4 -> C7 (5.64 km, 6.7 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_dabd03213c5dbaa439faa8f6ee8701fa = L.polyline(
+                [[37.556469, 126.923398], [37.556751, 126.923775], [37.55692, 126.924003], [37.557014, 126.924129], [37.557044, 126.924169], [37.557097, 126.92424], [37.557551, 126.92485], [37.55769, 126.925037], [37.558141, 126.925643], [37.558269, 126.925814], [37.558485, 126.926097], [37.558536, 126.926184], [37.558564, 126.926243], [37.55859, 126.926381], [37.558605, 126.926479], [37.558609, 126.926548], [37.558618, 126.926675], [37.558619, 126.926684], [37.558614, 126.926823], [37.558602, 126.926897], [37.558561, 126.927021], [37.558518, 126.927135], [37.558461, 126.927299], [37.558338, 126.92762], [37.558308, 126.927701], [37.557924, 126.928748], [37.55786, 126.928925], [37.557729, 126.929282], [37.557663, 126.929462], [37.557427, 126.930093], [37.55708, 126.931018], [37.557004, 126.931222], [37.556952, 126.931361], [37.556921, 126.931449], [37.556856, 126.931638], [37.556792, 126.931816], [37.556749, 126.93194], [37.556711, 126.932043], [37.556455, 126.932799], [37.556053, 126.933983], [37.555974, 126.93421], [37.555942, 126.934295], [37.555872, 126.934521], [37.555792, 126.934743], [37.555773, 126.934808], [37.555726, 126.934937], [37.555654, 126.935124], [37.555577, 126.935335], [37.555383, 126.935903], [37.555368, 126.935946], [37.55534, 126.936023], [37.555238, 126.936274], [37.555205, 126.936441], [37.555148, 126.936647], [37.555111, 126.936811], [37.555102, 126.936863], [37.555102, 126.936929], [37.555083, 126.937004], [37.555083, 126.937068], [37.55509, 126.937201], [37.55532, 126.937889], [37.555505, 126.938472], [37.555657, 126.938927], [37.555693, 126.93902], [37.556031, 126.94006], [37.556169, 126.940477], [37.556365, 126.941083], [37.556426, 126.94129], [37.556466, 126.941626], [37.556501, 126.942282], [37.556515, 126.94259], [37.55653, 126.942907], [37.556575, 126.94367], [37.556599, 126.944074], [37.556685, 126.94548], [37.556708, 126.945857], [37.556719, 126.946131], [37.556733, 126.946485], [37.556744, 126.946751], [37.556762, 126.947211], [37.556842, 126.948461], [37.556902, 126.949393], [37.556928, 126.949796], [37.556946, 126.950079], [37.557003, 126.950967], [37.55705, 126.951773], [37.557109, 126.951983], [37.557124, 126.952248], [37.557166, 126.953204], [37.55719, 126.953704], [37.557224, 126.95442], [37.557283, 126.955339], [37.557331, 126.955848], [37.557348, 126.956006], [37.557337, 126.956183], [37.557339, 126.956524], [37.557275, 126.957585], [37.557204, 126.95887], [37.557185, 126.959199], [37.55717, 126.959485], [37.557905, 126.960398], [37.558834, 126.961527], [37.559116, 126.961853], [37.559322, 126.962129], [37.559365, 126.962183], [37.55953, 126.962396], [37.559635, 126.962524], [37.559894, 126.962775], [37.560165, 126.96297], [37.560742, 126.963357], [37.561058, 126.963551], [37.561098, 126.963573], [37.56138, 126.963729], [37.562065, 126.964123], [37.562315, 126.964297], [37.562357, 126.964323], [37.562539, 126.964437], [37.562734, 126.964569], [37.564122, 126.965503], [37.564502, 126.965765], [37.564746, 126.965918], [37.56523, 126.96629], [37.565296, 126.966378], [37.565336, 126.966458], [37.565358, 126.96653], [37.565375, 126.96662], [37.565382, 126.966727], [37.565379, 126.966852], [37.565371, 126.966915], [37.565356, 126.967004], [37.565255, 126.967145], [37.565113, 126.967262], [37.56485, 126.96749], [37.564617, 126.967644], [37.563744, 126.968271], [37.563304, 126.968636], [37.563257, 126.968668], [37.562945, 126.968893], [37.562754, 126.969033], [37.5623, 126.969367], [37.562162, 126.969469], [37.562085, 126.969525], [37.561912, 126.969652], [37.561947, 126.969799], [37.561986, 126.969959], [37.562373, 126.971547], [37.562483, 126.971999], [37.562484, 126.972003], [37.562649, 126.972372], [37.562678, 126.972495], [37.562821, 126.973099], [37.562855, 126.973243], [37.563052, 126.974076], [37.563068, 126.974139], [37.563322, 126.974835], [37.563351, 126.974915], [37.563529, 126.975342], [37.563667, 126.975672], [37.563745, 126.97586], [37.563806, 126.976007], [37.563857, 126.976234], [37.563966, 126.976587], [37.563985, 126.976742], [37.563996, 126.976829], [37.56396, 126.976972], [37.564171, 126.977038], [37.564462, 126.977128], [37.56462, 126.977182], [37.564655, 126.977194], [37.564706, 126.977204], [37.564844, 126.977209], [37.564928, 126.977213], [37.565103, 126.977221], [37.565242, 126.977226], [37.565403, 126.977227], [37.566596, 126.97723], [37.56688, 126.977239], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568029, 126.977296], [37.56804, 126.977347], [37.568128, 126.977752], [37.568189, 126.978025], [37.568165, 126.978309], [37.56756, 126.978261], [37.567007, 126.978164], [37.567005, 126.977993]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_dabd03213c5dbaa439faa8f6ee8701fa.bindTooltip(
+                `<div>
+                     Vehicle 0: C7 -> Depot (6.39 km, 6.7 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_2ebfdc77c7f9cd2551afcc60c5293f0b = L.polyline(
+                [[37.572904, 126.977133], [37.572586, 126.977142], [37.571691, 126.977166], [37.571413, 126.977174], [37.570489, 126.977095], [37.570413, 126.977088], [37.570354, 126.977083], [37.57028, 126.977076], [37.570242, 126.977073], [37.570197, 126.97707], [37.570137, 126.977065], [37.570047, 126.977058], [37.569997, 126.977054], [37.569634, 126.977028], [37.569052, 126.977035], [37.569057, 126.976841], [37.56905, 126.97613], [37.569265, 126.975869], [37.569424, 126.975765], [37.569576, 126.97571], [37.569792, 126.97563], [37.570111, 126.975511], [37.570133, 126.97684], [37.570134, 126.9769], [37.570137, 126.977065], [37.57014, 126.977213], [37.57014, 126.977303], [37.570141, 126.977359], [37.570145, 126.977555], [37.570141, 126.978433], [37.570141, 126.979338], [37.570201, 126.979338], [37.570237, 126.979338], [37.570263, 126.979338], [37.570415, 126.979336], [37.571202, 126.979317], [37.571351, 126.979312], [37.571549, 126.979296], [37.571766, 126.979279], [37.572152, 126.97925], [37.572423, 126.979224], [37.572475, 126.980159], [37.572606, 126.980099], [37.573447, 126.979844], [37.573559, 126.979731], [37.573663, 126.980021]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_2ebfdc77c7f9cd2551afcc60c5293f0b.bindTooltip(
+                `<div>
+                     V0 delivery at C1: C1 -> S0 (1.47 km, 3.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_4837052e9846f2fa6c5a87077e163104 = L.polyline(
+                [[37.573663, 126.980021], [37.573559, 126.979731], [37.573974, 126.979514], [37.574278, 126.979378], [37.574295, 126.979338], [37.574328, 126.978569], [37.57435, 126.97857], [37.574372, 126.978564], [37.574391, 126.97855], [37.574407, 126.978529], [37.574417, 126.978504], [37.57442, 126.978476], [37.574417, 126.978446], [37.574407, 126.978419], [37.574391, 126.978397], [37.57437, 126.978383], [37.574347, 126.978377], [37.574345, 126.978295], [37.574342, 126.978177], [37.574397, 126.977996], [37.574389, 126.977751], [37.574378, 126.97735], [37.574376, 126.977306], [37.574378, 126.97726], [37.574389, 126.977232], [37.574409, 126.977217], [37.574446, 126.977205], [37.574934, 126.977185], [37.575064, 126.97718], [37.575114, 126.977178], [37.57519, 126.977177], [37.575281, 126.977172], [37.575257, 126.977062], [37.575161, 126.977068], [37.575063, 126.977076], [37.574933, 126.977078], [37.57489, 126.977079], [37.573541, 126.977116], [37.572904, 126.977133]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_4837052e9846f2fa6c5a87077e163104.bindTooltip(
+                `<div>
+                     V0 delivery at C1: S0 -> C1 (0.69 km, 1.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_b174687efe39bac05bc3726481e16178 = L.polyline(
+                [[37.52186, 126.92454], [37.521652, 126.92421], [37.521374, 126.924289], [37.520858, 126.924808], [37.519305, 126.926374], [37.519366, 126.926469], [37.519435, 126.926569], [37.519626, 126.926876]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_b174687efe39bac05bc3726481e16178.bindTooltip(
+                `<div>
+                     V0 delivery at C4: C4 -> S3 (0.42 km, 0.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_649df370baa14fa59a6eb597f7fba0a0 = L.polyline(
+                [[37.519626, 126.926876], [37.519873, 126.927273], [37.52101, 126.926167], [37.520576, 126.925453], [37.521422, 126.924619], [37.521517, 126.924526], [37.521652, 126.92421], [37.52186, 126.92454]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_649df370baa14fa59a6eb597f7fba0a0.bindTooltip(
+                `<div>
+                     V0 delivery at C4: S3 -> C4 (0.49 km, 1.2 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_7d82c059cc07424c55f4bc1f0eb20282 = L.polyline(
+                [[37.556469, 126.923398], [37.556751, 126.923775], [37.55692, 126.924003], [37.557014, 126.924129], [37.557044, 126.924169], [37.557097, 126.92424], [37.557551, 126.92485], [37.55769, 126.925037], [37.558141, 126.925643], [37.558269, 126.925814], [37.558485, 126.926097], [37.558536, 126.926184], [37.558564, 126.926243], [37.558701, 126.926533], [37.558744, 126.926612], [37.558788, 126.926643], [37.55877, 126.926523], [37.558762, 126.926421], [37.558754, 126.926264], [37.558721, 126.926152], [37.558687, 126.926065], [37.558627, 126.925963], [37.558468, 126.925753], [37.558402, 126.925668], [37.558335, 126.925579], [37.55808, 126.925245], [37.557849, 126.924943], [37.557753, 126.924816], [37.557209, 126.924104], [37.557154, 126.924032], [37.556961, 126.923778], [37.556148, 126.922706], [37.556246, 126.922588], [37.556491, 126.922305], [37.556907, 126.921823], [37.556936, 126.921864], [37.557044, 126.922018], [37.557432, 126.921561]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_7d82c059cc07424c55f4bc1f0eb20282.bindTooltip(
+                `<div>
+                     V0 delivery at C7: C7 -> S6 (1.05 km, 1.7 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_c1663ee1b57e5036492b80dd7dea3503 = L.polyline(
+                [[37.557432, 126.921561], [37.557044, 126.922018], [37.556936, 126.921864], [37.556907, 126.921823], [37.556885, 126.921797], [37.556801, 126.921746], [37.556599, 126.921626], [37.556482, 126.921556], [37.556308, 126.92145], [37.556286, 126.921422], [37.556239, 126.921274], [37.556083, 126.92078], [37.55601, 126.92055], [37.555901, 126.92068], [37.555793, 126.92081], [37.555574, 126.921072], [37.555333, 126.921351], [37.55524, 126.921462], [37.55513, 126.921597], [37.555225, 126.921725], [37.555995, 126.92276], [37.556044, 126.92283], [37.556469, 126.923398]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            poly_line_c1663ee1b57e5036492b80dd7dea3503.bindTooltip(
+                `<div>
+                     V0 delivery at C7: S6 -> C7 (0.59 km, 1.2 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_3139a90608b5c1acbd495d9b89c98eef = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            var div_icon_241198cee69bcf0d4518d09f67181cee = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        0\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_3b40ec2a28bea6f64ec15a7e9eaae977 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ebf0bcb6a98f9dbac5f3c52c5eb9a79e = $(`<div id="html_ebf0bcb6a98f9dbac5f3c52c5eb9a79e" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 0<br>Node: Depot<br>Type: Depot start<br>Arrival: 0.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: 0.0 min<br></div>`)[0];
+                popup_3b40ec2a28bea6f64ec15a7e9eaae977.setContent(html_ebf0bcb6a98f9dbac5f3c52c5eb9a79e);
+            
+        
+
+        marker_3139a90608b5c1acbd495d9b89c98eef.bindPopup(popup_3b40ec2a28bea6f64ec15a7e9eaae977)
+        ;
+
+        
+    
+    
+            marker_3139a90608b5c1acbd495d9b89c98eef.bindTooltip(
+                `<div>
+                     V0-0-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3139a90608b5c1acbd495d9b89c98eef.setIcon(div_icon_241198cee69bcf0d4518d09f67181cee);
+            
+    
+            var marker_aa6b132fe5e6146562899d8f5c5a17be = L.marker(
+                [37.5729, 126.9769],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            var div_icon_4410e0eac0da59c4a2e0921703ecf8bc = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        1\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_ec72d6c7aedf8e9a6f10d83955ded3da = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_62f70f18a90f5985804649277cf8558a = $(`<div id="html_62f70f18a90f5985804649277cf8558a" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 1<br>Node: C1<br>Type: Charging customer<br>Arrival: 20.0 min<br>Service: 12.0 min<br>Delivery tour: 8.9 min<br>Departure: 40.9 min<br>Delivery: C1 -> S0 -> C1</div>`)[0];
+                popup_ec72d6c7aedf8e9a6f10d83955ded3da.setContent(html_62f70f18a90f5985804649277cf8558a);
+            
+        
+
+        marker_aa6b132fe5e6146562899d8f5c5a17be.bindPopup(popup_ec72d6c7aedf8e9a6f10d83955ded3da)
+        ;
+
+        
+    
+    
+            marker_aa6b132fe5e6146562899d8f5c5a17be.bindTooltip(
+                `<div>
+                     V0-1-C1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_aa6b132fe5e6146562899d8f5c5a17be.setIcon(div_icon_4410e0eac0da59c4a2e0921703ecf8bc);
+            
+    
+            var marker_e46e347c3b8944a0b7e5dcc905928530 = L.marker(
+                [37.5219, 126.9245],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            var div_icon_fa3a944677c310d4227ddeab628e43df = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        2\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_c09338fd4fb192a231ab845cb8dde6b8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9dd4f876df677950d45fe6cb53356740 = $(`<div id="html_9dd4f876df677950d45fe6cb53356740" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 2<br>Node: C4<br>Type: Charging customer<br>Arrival: 49.5 min<br>Service: 15.0 min<br>Delivery tour: 9.8 min<br>Departure: 74.3 min<br>Delivery: C4 -> S3 -> C4</div>`)[0];
+                popup_c09338fd4fb192a231ab845cb8dde6b8.setContent(html_9dd4f876df677950d45fe6cb53356740);
+            
+        
+
+        marker_e46e347c3b8944a0b7e5dcc905928530.bindPopup(popup_c09338fd4fb192a231ab845cb8dde6b8)
+        ;
+
+        
+    
+    
+            marker_e46e347c3b8944a0b7e5dcc905928530.bindTooltip(
+                `<div>
+                     V0-2-C4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e46e347c3b8944a0b7e5dcc905928530.setIcon(div_icon_fa3a944677c310d4227ddeab628e43df);
+            
+    
+            var marker_cf4c628f17a3cea806e2433be5fc773d = L.marker(
+                [37.5563, 126.9236],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            var div_icon_62d4c660f6ecbcf75c3eef75539e4023 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        3\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_f347e87d2ce021ec05080d720a27206f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_20acf6d5d50eae2838edb56f5bed40f9 = $(`<div id="html_20acf6d5d50eae2838edb56f5bed40f9" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 3<br>Node: C7<br>Type: Charging customer<br>Arrival: 81.0 min<br>Service: 13.0 min<br>Delivery tour: 11.8 min<br>Departure: 105.9 min<br>Delivery: C7 -> S6 -> C7</div>`)[0];
+                popup_f347e87d2ce021ec05080d720a27206f.setContent(html_20acf6d5d50eae2838edb56f5bed40f9);
+            
+        
+
+        marker_cf4c628f17a3cea806e2433be5fc773d.bindPopup(popup_f347e87d2ce021ec05080d720a27206f)
+        ;
+
+        
+    
+    
+            marker_cf4c628f17a3cea806e2433be5fc773d.bindTooltip(
+                `<div>
+                     V0-3-C7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_cf4c628f17a3cea806e2433be5fc773d.setIcon(div_icon_62d4c660f6ecbcf75c3eef75539e4023);
+            
+    
+            var marker_ed7aff0d42108528c44d35cf7a0a5233 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_ea31d54038ca9f63503ff08855a4823e);
+        
+    
+            var div_icon_cb3e7856dbcf54936b59e4b6b81de28a = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        R\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_f2fc690902a275d9a4010659b9b49c6d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0fd507681e751caeca9d031e945e0f72 = $(`<div id="html_0fd507681e751caeca9d031e945e0f72" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 4<br>Node: Depot<br>Type: Depot return<br>Arrival: 600.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: -<br></div>`)[0];
+                popup_f2fc690902a275d9a4010659b9b49c6d.setContent(html_0fd507681e751caeca9d031e945e0f72);
+            
+        
+
+        marker_ed7aff0d42108528c44d35cf7a0a5233.bindPopup(popup_f2fc690902a275d9a4010659b9b49c6d)
+        ;
+
+        
+    
+    
+            marker_ed7aff0d42108528c44d35cf7a0a5233.bindTooltip(
+                `<div>
+                     V0-4-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ed7aff0d42108528c44d35cf7a0a5233.setIcon(div_icon_cb3e7856dbcf54936b59e4b6b81de28a);
+            
+    
+            feature_group_ea31d54038ca9f63503ff08855a4823e.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var feature_group_95d1df0fada95df7931d58d200fb1938 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_db1f2a8255e735c8e17b2d35ac8678a0 = L.polyline(
+                [[37.567005, 126.977993], [37.567002, 126.977601], [37.567001, 126.977371], [37.567002, 126.977312], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.568967, 126.977248], [37.568989, 126.977269], [37.569102, 126.977462], [37.569098, 126.977504], [37.569091, 126.977578], [37.569092, 126.977597], [37.569072, 126.977886], [37.568985, 126.979141], [37.568974, 126.979282], [37.568962, 126.979404], [37.568932, 126.979813], [37.568917, 126.980059], [37.568838, 126.981109], [37.568789, 126.98205], [37.568763, 126.982433], [37.568755, 126.982527], [37.568736, 126.982765], [37.568697, 126.982983], [37.568553, 126.98382], [37.568358, 126.984882], [37.568204, 126.98562], [37.568133, 126.986021], [37.568015, 126.986634], [37.568008, 126.987151], [37.567991, 126.987545], [37.567987, 126.987743], [37.56798, 126.988109], [37.567964, 126.989024], [37.568004, 126.989584], [37.568038, 126.990152], [37.56804, 126.990175], [37.568077, 126.990931], [37.568181, 126.992437], [37.5682, 126.992638], [37.568213, 126.992804], [37.568294, 126.993749], [37.568336, 126.99434], [37.568359, 126.994647], [37.568412, 126.995098], [37.568414, 126.995178], [37.568428, 126.995327], [37.568443, 126.995486], [37.568449, 126.995557], [37.56845, 126.995574], [37.568497, 126.996107], [37.568516, 126.996307], [37.568605, 126.997116], [37.568704, 126.997943], [37.568727, 126.998042], [37.568937, 126.998978], [37.569043, 126.999629], [37.56911, 127.000041], [37.569144, 127.000239], [37.569358, 127.001505], [37.569388, 127.001715], [37.56941, 127.001873], [37.569434, 127.002042], [37.569455, 127.002271], [37.569462, 127.002347], [37.569472, 127.002555], [37.569477, 127.002678], [37.569476, 127.004538], [37.569506, 127.006619], [37.569626, 127.009359], [37.569625, 127.009638], [37.569618, 127.009776], [37.569615, 127.009952], [37.569618, 127.009998], [37.569619, 127.010081], [37.56958, 127.012167], [37.569582, 127.012443], [37.569583, 127.012474], [37.569598, 127.014191], [37.569611, 127.015349], [37.569614, 127.015677], [37.569616, 127.015869], [37.569629, 127.016088], [37.569889, 127.017062], [37.570113, 127.017619], [37.570364, 127.018122], [37.570806, 127.019009], [37.570832, 127.019058], [37.570883, 127.019156], [37.57093, 127.019243], [37.571163, 127.019685], [37.571478, 127.020404], [37.571604, 127.020754], [37.571681, 127.021172], [37.571714, 127.021523], [37.571714, 127.021908], [37.571603, 127.022904], [37.571591, 127.022945], [37.571505, 127.023247], [37.571492, 127.023291], [37.57148, 127.023332], [37.571464, 127.02339], [37.571423, 127.023532], [37.571375, 127.023685], [37.571028, 127.024845], [37.570952, 127.025095], [37.570755, 127.025779], [37.57054, 127.026527], [37.57052, 127.026596], [37.570093, 127.027985], [37.57001, 127.028257], [37.569776, 127.029137], [37.569571, 127.029912], [37.569542, 127.030101], [37.569516, 127.030275], [37.569459, 127.030272], [37.569244, 127.030258], [37.569214, 127.030256], [37.569138, 127.030252], [37.568986, 127.030242], [37.568595, 127.030218], [37.568473, 127.03021], [37.567684, 127.030161], [37.567287, 127.030133], [37.566943, 127.030107], [37.566784, 127.030101], [37.566591, 127.030094], [37.565535, 127.030084], [37.565445, 127.030083], [37.564769, 127.030072], [37.564476, 127.030065], [37.564407, 127.030061], [37.564171, 127.03005], [37.564097, 127.029999], [37.564079, 127.030041], [37.564034, 127.030144], [37.563888, 127.030474], [37.563834, 127.030591], [37.563721, 127.030846], [37.563589, 127.031142], [37.563566, 127.031196], [37.563545, 127.031242], [37.563296, 127.031803], [37.563044, 127.032384], [37.562987, 127.032507], [37.56292, 127.032652], [37.562917, 127.032659], [37.562697, 127.033103], [37.562448, 127.033525], [37.562261, 127.033829], [37.56218, 127.033956], [37.561921, 127.034372], [37.5617, 127.034703], [37.561432, 127.035066], [37.561271, 127.035251], [37.561183, 127.035434], [37.560924, 127.035542], [37.560848, 127.035593], [37.560776, 127.035661], [37.560168, 127.036141], [37.5597, 127.03654], [37.559578, 127.036644], [37.559448, 127.036754], [37.559438, 127.036763], [37.559196, 127.037108], [37.55907, 127.037163], [37.559, 127.037253], [37.558812, 127.037496], [37.558673, 127.037756], [37.558513, 127.038102], [37.55829, 127.038642], [37.558224, 127.038874], [37.558136, 127.038989], [37.557969, 127.039434], [37.557867, 127.039694], [37.557798, 127.040047], [37.557775, 127.040167], [37.557701, 127.040567], [37.557666, 127.040756], [37.557627, 127.040957], [37.557573, 127.041229], [37.557517, 127.041509], [37.557416, 127.042005], [37.557396, 127.042104], [37.557374, 127.042202], [37.557349, 127.042286], [37.557313, 127.042382], [37.55727, 127.042485], [37.557227, 127.042567], [37.557173, 127.042659], [37.557151, 127.042692], [37.557092, 127.042768], [37.557016, 127.042861], [37.556942, 127.042938], [37.556884, 127.042994], [37.556827, 127.043042], [37.556759, 127.04309], [37.556694, 127.043133], [37.556606, 127.043173], [37.556533, 127.043207], [37.556468, 127.043232], [37.556394, 127.043249], [37.556304, 127.043266], [37.555326, 127.043415], [37.554774, 127.043493], [37.554352, 127.043558], [37.553837, 127.043648], [37.553728, 127.043664], [37.551724, 127.04396], [37.551606, 127.043956], [37.551558, 127.043954], [37.551508, 127.043951], [37.551379, 127.043959], [37.55121, 127.04397], [37.551007, 127.043989], [37.550675, 127.044026], [37.550182, 127.044099], [37.54979, 127.044161], [37.549734, 127.044168], [37.549692, 127.044174], [37.548448, 127.044369], [37.548202, 127.044403], [37.548088, 127.044419], [37.548049, 127.044533], [37.547416, 127.046621], [37.546881, 127.04828], [37.546721, 127.048757], [37.546527, 127.049386], [37.546439, 127.049677], [37.546355, 127.049952], [37.546242, 127.050328], [37.545692, 127.0521], [37.545299, 127.053402], [37.545108, 127.054061], [37.544767, 127.055168], [37.544379, 127.056477], [37.544204, 127.057094], [37.544158, 127.057247], [37.544005, 127.057754], [37.543631, 127.058992], [37.543276, 127.060168], [37.543206, 127.060407], [37.542773, 127.061851], [37.542342, 127.063265], [37.542201, 127.063708], [37.542144, 127.063887], [37.542122, 127.063958], [37.542096, 127.064038], [37.542048, 127.06419], [37.541863, 127.064734], [37.541293, 127.066378], [37.540787, 127.067877], [37.54076, 127.067955], [37.540675, 127.068207], [37.540143, 127.06978], [37.53994, 127.070379], [37.539922, 127.070434], [37.539879, 127.07056], [37.539842, 127.070675], [37.539784, 127.070849], [37.53928, 127.072367], [37.538975, 127.07338], [37.538716, 127.074358], [37.538664, 127.074575], [37.538538, 127.075097], [37.538435, 127.075518], [37.538034, 127.077139], [37.538003, 127.077261], [37.537632, 127.078704], [37.537572, 127.078936], [37.537516, 127.079148], [37.537143, 127.080652], [37.537119, 127.080749], [37.537004, 127.08121], [37.536726, 127.082374], [37.5366, 127.082902], [37.53656, 127.083119], [37.536545, 127.083345], [37.536545, 127.083366], [37.536546, 127.083544], [37.536399, 127.083587], [37.53631, 127.083614], [37.536232, 127.083637], [37.536168, 127.083656], [37.535948, 127.083721], [37.535035, 127.084069], [37.534886, 127.084129], [37.534564, 127.084261], [37.534456, 127.084301], [37.53389, 127.084511], [37.533454, 127.084693], [37.533264, 127.08478], [37.533103, 127.084866], [37.532778, 127.08504], [37.532569, 127.085194], [37.532416, 127.085311], [37.532287, 127.085404], [37.531874, 127.085697], [37.531846, 127.085719], [37.531175, 127.086237], [37.531003, 127.08637], [37.530545, 127.086736], [37.530339, 127.086902], [37.52959, 127.087485], [37.529326, 127.087685], [37.528645, 127.088215], [37.528328, 127.088455], [37.527471, 127.089105], [37.526888, 127.089594], [37.526554, 127.08985], [37.526482, 127.089905], [37.521539, 127.093682], [37.519792, 127.095038], [37.518949, 127.095684], [37.518787, 127.095797], [37.517648, 127.096731], [37.515919, 127.097991], [37.515683, 127.098143], [37.5154, 127.098346], [37.515188, 127.098519], [37.513905, 127.099366], [37.513432, 127.099766], [37.513258, 127.099914], [37.513091, 127.100058], [37.513138, 127.100225], [37.513182, 127.100363], [37.513348, 127.100211], [37.513297, 127.100037], [37.513287, 127.100006]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_db1f2a8255e735c8e17b2d35ac8678a0.bindTooltip(
+                `<div>
+                     Vehicle 1: Depot -> C6 (14.90 km, 16.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_1029a791340835143aed8fd54cd03497 = L.polyline(
+                [[37.513287, 127.100006], [37.513258, 127.099914], [37.513205, 127.099733], [37.513006, 127.099086], [37.512559, 127.097158], [37.512427, 127.096624], [37.512337, 127.09619], [37.512288, 127.09578], [37.512002, 127.092871], [37.51189, 127.092535], [37.511879, 127.092355], [37.511836, 127.091942], [37.511667, 127.090318], [37.511513, 127.088852], [37.511507, 127.08859], [37.511588, 127.085854], [37.511598, 127.085586], [37.511712, 127.08532], [37.511719, 127.084991], [37.511826, 127.082147], [37.511904, 127.079755], [37.51193, 127.078964], [37.511948, 127.078621], [37.511954, 127.078422], [37.511947, 127.078261], [37.5119, 127.077951], [37.511877, 127.077751], [37.511767, 127.077099], [37.511485, 127.07554], [37.51126, 127.07412], [37.511253, 127.074079], [37.511236, 127.073971], [37.511208, 127.073796], [37.51119, 127.073681], [37.511183, 127.073635], [37.51117, 127.073555], [37.511101, 127.073118], [37.510837, 127.071646], [37.510805, 127.07147], [37.510711, 127.070926], [37.510662, 127.070647], [37.510625, 127.070424], [37.510332, 127.068658], [37.510174, 127.067556], [37.510132, 127.067361], [37.509959, 127.066438], [37.50992, 127.066309], [37.509711, 127.065634], [37.509657, 127.065365], [37.50959, 127.065143], [37.509341, 127.064635], [37.509261, 127.064509], [37.508885, 127.063419], [37.508747, 127.062984], [37.508691, 127.062795], [37.508461, 127.062029], [37.508338, 127.061511], [37.508264, 127.060864], [37.50817, 127.060491], [37.5079, 127.059543], [37.507846, 127.059375], [37.507764, 127.059154], [37.5077, 127.058951], [37.507416, 127.058083], [37.507228, 127.057474], [37.507132, 127.057151], [37.507011, 127.056766], [37.506984, 127.056667], [37.50694, 127.056536], [37.506787, 127.056027], [37.506463, 127.054977], [37.505828, 127.052905], [37.505782, 127.052753], [37.505172, 127.050739], [37.504678, 127.049123], [37.504631, 127.048963], [37.504486, 127.048494], [37.504245, 127.047711], [37.504079, 127.047188], [37.50362, 127.0457], [37.503597, 127.045626], [37.503186, 127.044319], [37.502979, 127.043614], [37.502786, 127.042926], [37.502772, 127.042872], [37.502742, 127.042756], [37.502719, 127.042667], [37.502668, 127.042509], [37.50264, 127.04242], [37.502605, 127.042313], [37.502524, 127.042063], [37.50223, 127.041147], [37.501848, 127.039928], [37.501799, 127.039773], [37.501572, 127.039099], [37.501341, 127.038371], [37.501243, 127.038045], [37.500991, 127.037199], [37.500939, 127.037023], [37.500905, 127.036911], [37.500828, 127.036647], [37.500724, 127.036295], [37.500505, 127.035588], [37.500458, 127.035436], [37.500213, 127.03465], [37.499982, 127.033911], [37.49972, 127.033046], [37.499629, 127.032749], [37.499149, 127.031223], [37.499081, 127.031], [37.499025, 127.030826], [37.498718, 127.029835], [37.498295, 127.028495], [37.49822, 127.028253], [37.498048, 127.027681], [37.498029, 127.027618], [37.498017, 127.02758], [37.497984, 127.027473], [37.497925, 127.027502], [37.497866, 127.027531], [37.497887, 127.027606]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_1029a791340835143aed8fd54cd03497.bindTooltip(
+                `<div>
+                     Vehicle 1: C6 -> C5 (6.74 km, 7.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_d4798fdaf0f5d1f29d1fe84dbbfa67ea = L.polyline(
+                [[37.497887, 127.027606], [37.497891, 127.027621], [37.497904, 127.027663], [37.497923, 127.02773], [37.497989, 127.0277], [37.498048, 127.027681], [37.498169, 127.027641], [37.498373, 127.027547], [37.498496, 127.027488], [37.498837, 127.027328], [37.499231, 127.027148], [37.499549, 127.026993], [37.499602, 127.026968], [37.499876, 127.026838], [37.500409, 127.026582], [37.501057, 127.026297], [37.501224, 127.026236], [37.501639, 127.026036], [37.501976, 127.025849], [37.50229, 127.025703], [37.502648, 127.025536], [37.503601, 127.025058], [37.503945, 127.024893], [37.504301, 127.024727], [37.504499, 127.024603], [37.504698, 127.024496], [37.505101, 127.024301], [37.505264, 127.024222], [37.505596, 127.02408], [37.505917, 127.02397], [37.506125, 127.023872], [37.506515, 127.023693], [37.50677, 127.023548], [37.507074, 127.023376], [37.507172, 127.023327], [37.507449, 127.023181], [37.508648, 127.022615], [37.509381, 127.02226], [37.509641, 127.022127], [37.510609, 127.021659], [37.510873, 127.021534], [37.511081, 127.021435], [37.511172, 127.021386], [37.511335, 127.021309], [37.511974, 127.021006], [37.512246, 127.020886], [37.512851, 127.020622], [37.513112, 127.020544], [37.51371, 127.020355], [37.513805, 127.020326], [37.51382, 127.020322], [37.514607, 127.020102], [37.515419, 127.019803], [37.51554, 127.019772], [37.515644, 127.019749], [37.515867, 127.019694], [37.516154, 127.019629], [37.51641, 127.01957], [37.516617, 127.019515], [37.516956, 127.019422], [37.517752, 127.019133], [37.517993, 127.019046], [37.521621, 127.017911], [37.522046, 127.017796], [37.522218, 127.017681], [37.522357, 127.017555], [37.523016, 127.016915], [37.523122, 127.016819], [37.523205, 127.016745], [37.524695, 127.015393], [37.525533, 127.014651], [37.52686, 127.013413], [37.527726, 127.012565], [37.527888, 127.012407], [37.528531, 127.011826], [37.529123, 127.011255], [37.530303, 127.010181], [37.530568, 127.009925], [37.530692, 127.009819], [37.530909, 127.009634], [37.531859, 127.008918], [37.532096, 127.008727], [37.532668, 127.008272], [37.534052, 127.007212], [37.53473, 127.006714], [37.535373, 127.006238], [37.535724, 127.006012], [37.536578, 127.005414], [37.537053, 127.005115], [37.53745, 127.00487], [37.537562, 127.004801], [37.537806, 127.004629], [37.538107, 127.00449], [37.538611, 127.004306], [37.539069, 127.004165], [37.539479, 127.004056], [37.540304, 127.003868], [37.540513, 127.003811], [37.540687, 127.003719], [37.540828, 127.003615], [37.541024, 127.003436], [37.541104, 127.003323], [37.54118, 127.003204], [37.541259, 127.003068], [37.541325, 127.002932], [37.541461, 127.002616], [37.541605, 127.002327], [37.541646, 127.002245], [37.541688, 127.002173], [37.541797, 127.002035], [37.541884, 127.001937], [37.542054, 127.001767], [37.542223, 127.001636], [37.542725, 127.001305], [37.542881, 127.001206], [37.555089, 126.993461], [37.555781, 126.992979], [37.556314, 126.992686], [37.556505, 126.992627], [37.556544, 126.992615], [37.556765, 126.992545], [37.556981, 126.99248], [37.557202, 126.992422], [37.55723, 126.99242], [37.557624, 126.992364], [37.557943, 126.992306], [37.558407, 126.992205], [37.558714, 126.992104], [37.558923, 126.991977], [37.559124, 126.991815], [37.559328, 126.991607], [37.559502, 126.991374], [37.559653, 126.991084], [37.559862, 126.990559], [37.559958, 126.990239], [37.560023, 126.990015], [37.5602, 126.989715], [37.560397, 126.989482], [37.560534, 126.989361], [37.560692, 126.989257], [37.560904, 126.9892], [37.561092, 126.989151], [37.561301, 126.989097], [37.561443, 126.989071], [37.561469, 126.989069], [37.561934, 126.989031], [37.562279, 126.988988], [37.56258, 126.988935], [37.562687, 126.988901], [37.562917, 126.988779], [37.563169, 126.988616], [37.56321, 126.988591], [37.563497, 126.98842], [37.563762, 126.988248], [37.563928, 126.988126], [37.564143, 126.988011], [37.564296, 126.987936], [37.564491, 126.987861], [37.564651, 126.987797], [37.564832, 126.987757], [37.565235, 126.987744], [37.565483, 126.987727], [37.565934, 126.987711], [37.565975, 126.987709], [37.566079, 126.987705], [37.566218, 126.987701], [37.566216, 126.98751], [37.566209, 126.98734], [37.566205, 126.987232], [37.56615, 126.985746], [37.566107, 126.984481], [37.56609, 126.983536], [37.566056, 126.982945], [37.566052, 126.982755], [37.566053, 126.982584], [37.566041, 126.982296], [37.56604, 126.982087], [37.566029, 126.981466], [37.566013, 126.980623], [37.566011, 126.979613], [37.56601, 126.978978], [37.566107, 126.979033], [37.566175, 126.979096], [37.566246, 126.979142], [37.566364, 126.979148], [37.566899, 126.979196], [37.566998, 126.979198], [37.567007, 126.978164], [37.567005, 126.977993]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_d4798fdaf0f5d1f29d1fe84dbbfa67ea.bindTooltip(
+                `<div>
+                     Vehicle 1: C5 -> Depot (9.52 km, 9.9 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_a58c6afa98bf7ad7e304ceec302a2c50 = L.polyline(
+                [[37.513287, 127.100006], [37.513258, 127.099914], [37.513205, 127.099733], [37.513006, 127.099086], [37.512559, 127.097158], [37.512427, 127.096624], [37.512337, 127.09619], [37.512288, 127.09578], [37.512002, 127.092871], [37.51189, 127.092535], [37.511815, 127.092921], [37.51198, 127.09477], [37.512046, 127.095437], [37.51171, 127.095543], [37.511609, 127.095575], [37.51131, 127.095686]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_a58c6afa98bf7ad7e304ceec302a2c50.bindTooltip(
+                `<div>
+                     V1 delivery at C6: C6 -> S5 (1.03 km, 1.5 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_bddd36a6acc76dd0a97cb05fa183e228 = L.polyline(
+                [[37.51131, 127.095686], [37.510495, 127.095989], [37.510116, 127.096155], [37.510224, 127.094812], [37.510232, 127.094738], [37.510241, 127.094637], [37.510314, 127.09389], [37.510331, 127.093756], [37.510363, 127.093407], [37.510371, 127.093325], [37.510417, 127.093029], [37.510455, 127.093031], [37.510585, 127.092995], [37.51068, 127.092966], [37.510923, 127.092884], [37.511373, 127.092713], [37.511655, 127.092616], [37.51189, 127.092535], [37.511815, 127.092921], [37.51198, 127.09477], [37.512046, 127.095437], [37.512097, 127.095844], [37.512248, 127.096669], [37.512401, 127.097321], [37.512926, 127.099503], [37.513045, 127.099902], [37.513091, 127.100058], [37.513138, 127.100225], [37.513182, 127.100363], [37.513348, 127.100211], [37.513297, 127.100037], [37.513287, 127.100006]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_bddd36a6acc76dd0a97cb05fa183e228.bindTooltip(
+                `<div>
+                     V1 delivery at C6: S5 -> C6 (1.34 km, 2.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_a10fe503a46188799a821c8391627e37 = L.polyline(
+                [[37.497887, 127.027606], [37.497891, 127.027621], [37.497904, 127.027663], [37.497923, 127.02773], [37.498009, 127.028008], [37.4981, 127.028307], [37.498141, 127.028439], [37.498225, 127.02872], [37.498437, 127.029417], [37.498687, 127.03025], [37.498883, 127.030896], [37.498934, 127.031073], [37.499081, 127.031], [37.499203, 127.030938], [37.499446, 127.030822]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_a10fe503a46188799a821c8391627e37.bindTooltip(
+                `<div>
+                     V1 delivery at C5: C5 -> S4 (0.39 km, 0.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_27b890bba19456d8f09104d0d6da36a9 = L.polyline(
+                [[37.499446, 127.030822], [37.499203, 127.030938], [37.499081, 127.031], [37.499025, 127.030826], [37.498718, 127.029835], [37.498295, 127.028495], [37.49822, 127.028253], [37.498048, 127.027681], [37.498029, 127.027618], [37.498017, 127.02758], [37.497984, 127.027473], [37.497925, 127.027502], [37.497866, 127.027531], [37.497887, 127.027606]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            poly_line_27b890bba19456d8f09104d0d6da36a9.bindTooltip(
+                `<div>
+                     V1 delivery at C5: S4 -> C5 (0.40 km, 0.7 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6f2df9e8bbc063906fa035914caf72ed = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            var div_icon_2936f34d58a4b069b6e4dbe090431951 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        0\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_41e6ad6320260a86ff2550066375bdfe = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_377b09818f026f292e5474d9aeb128ed = $(`<div id="html_377b09818f026f292e5474d9aeb128ed" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 0<br>Node: Depot<br>Type: Depot start<br>Arrival: 0.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: 0.0 min<br></div>`)[0];
+                popup_41e6ad6320260a86ff2550066375bdfe.setContent(html_377b09818f026f292e5474d9aeb128ed);
+            
+        
+
+        marker_6f2df9e8bbc063906fa035914caf72ed.bindPopup(popup_41e6ad6320260a86ff2550066375bdfe)
+        ;
+
+        
+    
+    
+            marker_6f2df9e8bbc063906fa035914caf72ed.bindTooltip(
+                `<div>
+                     V1-0-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6f2df9e8bbc063906fa035914caf72ed.setIcon(div_icon_2936f34d58a4b069b6e4dbe090431951);
+            
+    
+            var marker_3b0d05fa0e3d30cd77fbcca862966a4b = L.marker(
+                [37.5133, 127.1],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            var div_icon_08fda3897ecd4b9ec796b6ce117318c2 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        1\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_dd9915928561210dae9282e24a0a8276 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c7583612f74ec7639c2aae49e06e962a = $(`<div id="html_c7583612f74ec7639c2aae49e06e962a" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 1<br>Node: C6<br>Type: Charging customer<br>Arrival: 70.0 min<br>Service: 17.0 min<br>Delivery tour: 7.8 min<br>Departure: 94.8 min<br>Delivery: C6 -> S5 -> C6</div>`)[0];
+                popup_dd9915928561210dae9282e24a0a8276.setContent(html_c7583612f74ec7639c2aae49e06e962a);
+            
+        
+
+        marker_3b0d05fa0e3d30cd77fbcca862966a4b.bindPopup(popup_dd9915928561210dae9282e24a0a8276)
+        ;
+
+        
+    
+    
+            marker_3b0d05fa0e3d30cd77fbcca862966a4b.bindTooltip(
+                `<div>
+                     V1-1-C6
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3b0d05fa0e3d30cd77fbcca862966a4b.setIcon(div_icon_08fda3897ecd4b9ec796b6ce117318c2);
+            
+    
+            var marker_28a93c8b8da9518d56c14fc52f29a08f = L.marker(
+                [37.4979, 127.0276],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            var div_icon_75a85d277456dcd485363fb04cdaf05b = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        2\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_e0864cb08c7b51db9bb9490d18873f70 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c84d0bbb7fd7b6fcd2b246de67774848 = $(`<div id="html_c84d0bbb7fd7b6fcd2b246de67774848" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 2<br>Node: C5<br>Type: Charging customer<br>Arrival: 102.4 min<br>Service: 22.0 min<br>Delivery tour: 8.3 min<br>Departure: 132.7 min<br>Delivery: C5 -> S4 -> C5</div>`)[0];
+                popup_e0864cb08c7b51db9bb9490d18873f70.setContent(html_c84d0bbb7fd7b6fcd2b246de67774848);
+            
+        
+
+        marker_28a93c8b8da9518d56c14fc52f29a08f.bindPopup(popup_e0864cb08c7b51db9bb9490d18873f70)
+        ;
+
+        
+    
+    
+            marker_28a93c8b8da9518d56c14fc52f29a08f.bindTooltip(
+                `<div>
+                     V1-2-C5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_28a93c8b8da9518d56c14fc52f29a08f.setIcon(div_icon_75a85d277456dcd485363fb04cdaf05b);
+            
+    
+            var marker_8f220da00b1fb4be82117fc00796a57d = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_95d1df0fada95df7931d58d200fb1938);
+        
+    
+            var div_icon_9ff7df8655df4a22fee34d3036e079f7 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        R\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_a47771c7b688a91625b4f7864f278e59 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_537c5fb3466dbc4f053d3576130dfe46 = $(`<div id="html_537c5fb3466dbc4f053d3576130dfe46" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 3<br>Node: Depot<br>Type: Depot return<br>Arrival: 600.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: -<br></div>`)[0];
+                popup_a47771c7b688a91625b4f7864f278e59.setContent(html_537c5fb3466dbc4f053d3576130dfe46);
+            
+        
+
+        marker_8f220da00b1fb4be82117fc00796a57d.bindPopup(popup_a47771c7b688a91625b4f7864f278e59)
+        ;
+
+        
+    
+    
+            marker_8f220da00b1fb4be82117fc00796a57d.bindTooltip(
+                `<div>
+                     V1-3-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8f220da00b1fb4be82117fc00796a57d.setIcon(div_icon_9ff7df8655df4a22fee34d3036e079f7);
+            
+    
+            feature_group_95d1df0fada95df7931d58d200fb1938.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var feature_group_46bcd91657db77e41a6dd63640bedf0b = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_37b29f0b853de814e2687b45797ad839 = L.polyline(
+                [[37.567005, 126.977993], [37.567002, 126.977601], [37.567001, 126.977371], [37.567002, 126.977312], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.568967, 126.977248], [37.568989, 126.977269], [37.569102, 126.977462], [37.569098, 126.977504], [37.569091, 126.977578], [37.569092, 126.977597], [37.569072, 126.977886], [37.568985, 126.979141], [37.568974, 126.979282], [37.568962, 126.979404], [37.568932, 126.979813], [37.568917, 126.980059], [37.568838, 126.981109], [37.568789, 126.98205], [37.568763, 126.982433], [37.568755, 126.982527], [37.568736, 126.982765], [37.568697, 126.982983], [37.568553, 126.98382], [37.568358, 126.984882], [37.568204, 126.98562], [37.568133, 126.986021], [37.568015, 126.986634], [37.568008, 126.987151], [37.567991, 126.987545], [37.567987, 126.987743], [37.56798, 126.988109], [37.567964, 126.989024], [37.568004, 126.989584], [37.568038, 126.990152], [37.56804, 126.990175], [37.568077, 126.990931], [37.568181, 126.992437], [37.5682, 126.992638], [37.568213, 126.992804], [37.568294, 126.993749], [37.568336, 126.99434], [37.568359, 126.994647], [37.568412, 126.995098], [37.568414, 126.995178], [37.568428, 126.995327], [37.568443, 126.995486], [37.568449, 126.995557], [37.56845, 126.995574], [37.568497, 126.996107], [37.568516, 126.996307], [37.568605, 126.997116], [37.568704, 126.997943], [37.568727, 126.998042], [37.568937, 126.998978], [37.569043, 126.999629], [37.56911, 127.000041], [37.569144, 127.000239], [37.569358, 127.001505], [37.569388, 127.001715], [37.56941, 127.001873], [37.569434, 127.002042], [37.568911, 127.002087], [37.568779, 127.002099], [37.568379, 127.002124], [37.568103, 127.002153], [37.567935, 127.002171], [37.567728, 127.002192], [37.567337, 127.002233], [37.567281, 127.002239], [37.567199, 127.002248], [37.56698, 127.002267], [37.566905, 127.002275], [37.56678, 127.002284], [37.566786, 127.002527], [37.566792, 127.002808], [37.566582, 127.004117], [37.566563, 127.004234], [37.56654, 127.004364], [37.566484, 127.004661], [37.566457, 127.004835], [37.566448, 127.004883], [37.56629, 127.00594], [37.566217, 127.006323], [37.56615, 127.006764], [37.566125, 127.006881], [37.566078, 127.007135], [37.566026, 127.007457], [37.566003, 127.007579], [37.565982, 127.00769], [37.565954, 127.007793], [37.565926, 127.007894], [37.565896, 127.008026], [37.565851, 127.008226], [37.565834, 127.008289], [37.565771, 127.008483], [37.565646, 127.008833], [37.56563, 127.008869], [37.565387, 127.009605], [37.565373, 127.009652], [37.565325, 127.009813], [37.565425, 127.009858], [37.565499, 127.009691], [37.565586, 127.009396], [37.565699, 127.009016]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_37b29f0b853de814e2687b45797ad839.bindTooltip(
+                `<div>
+                     Vehicle 2: Depot -> C2 (3.58 km, 4.0 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_6d58384df979e324e34f345298ea0757 = L.polyline(
+                [[37.565699, 127.009016], [37.565837, 127.008549], [37.565983, 127.008056], [37.566047, 127.007838], [37.565979, 127.007803], [37.565954, 127.007793], [37.565926, 127.007894], [37.565896, 127.008026], [37.565851, 127.008226], [37.565834, 127.008289], [37.565771, 127.008483], [37.565646, 127.008833], [37.56563, 127.008869], [37.565387, 127.009605], [37.565373, 127.009652], [37.565325, 127.009813], [37.565266, 127.01001], [37.565197, 127.010239], [37.565, 127.010799], [37.564932, 127.010955], [37.56483, 127.011118], [37.564897, 127.01155], [37.564911, 127.012342], [37.564921, 127.012445], [37.564957, 127.012785], [37.56497, 127.01291], [37.565009, 127.013287], [37.56503, 127.01349], [37.565108, 127.014118], [37.565124, 127.01424], [37.56516, 127.01456], [37.56517, 127.014645], [37.565196, 127.014897], [37.565271, 127.015538], [37.565288, 127.01568], [37.565293, 127.015725], [37.565317, 127.01592], [37.56535, 127.01622], [37.565378, 127.016473], [37.565445, 127.016911], [37.56546, 127.01702], [37.565481, 127.017189], [37.565502, 127.017419], [37.56553, 127.01765], [37.565545, 127.017847], [37.565574, 127.01812], [37.56558, 127.01819], [37.5656, 127.01838], [37.565629, 127.018631], [37.56564, 127.01873], [37.565653, 127.019199], [37.56566, 127.01943], [37.565663, 127.019567], [37.565665, 127.019671], [37.565666, 127.019754], [37.56567, 127.01997], [37.56566, 127.02066], [37.56564, 127.02102], [37.565617, 127.021174], [37.56557, 127.02142], [37.565539, 127.021597], [37.565632, 127.021862], [37.56564, 127.021884], [37.565737, 127.022291], [37.565765, 127.022424], [37.565865, 127.022891], [37.565873, 127.022946], [37.56588, 127.023051], [37.565842, 127.023431], [37.565836, 127.023484], [37.565825, 127.023569], [37.565475, 127.023581], [37.56541, 127.023583], [37.565298, 127.023576], [37.565192, 127.023569], [37.565086, 127.023819], [37.565074, 127.024027], [37.56505, 127.02489], [37.56504, 127.025282], [37.565038, 127.025355], [37.565031, 127.025605], [37.565027, 127.02571], [37.565024, 127.025832], [37.56502, 127.025956], [37.564991, 127.026703], [37.56497, 127.02687], [37.564945, 127.027021], [37.564857, 127.027386], [37.564734, 127.027905], [37.564682, 127.028117], [37.564658, 127.028214], [37.564447, 127.029097], [37.56435, 127.029372], [37.564321, 127.029453], [37.564252, 127.029642], [37.564097, 127.029999], [37.564079, 127.030041], [37.564034, 127.030144], [37.563888, 127.030474], [37.563834, 127.030591], [37.563721, 127.030846], [37.563589, 127.031142], [37.563566, 127.031196], [37.563545, 127.031242], [37.563296, 127.031803], [37.563044, 127.032384], [37.562987, 127.032507], [37.56292, 127.032652], [37.562917, 127.032659], [37.562697, 127.033103], [37.562448, 127.033525], [37.562261, 127.033829], [37.56218, 127.033956], [37.561921, 127.034372], [37.5617, 127.034703], [37.561432, 127.035066], [37.561271, 127.035251], [37.561183, 127.035434], [37.560924, 127.035542], [37.560848, 127.035593], [37.560776, 127.035661], [37.560168, 127.036141], [37.5597, 127.03654], [37.559578, 127.036644], [37.559448, 127.036754], [37.559438, 127.036763], [37.559196, 127.037108], [37.55907, 127.037163], [37.559, 127.037253], [37.558812, 127.037496], [37.558673, 127.037756], [37.558513, 127.038102], [37.55829, 127.038642], [37.558224, 127.038874], [37.558136, 127.038989], [37.557969, 127.039434], [37.557867, 127.039694], [37.557798, 127.040047], [37.557775, 127.040167], [37.557701, 127.040567], [37.557666, 127.040756], [37.557627, 127.040957], [37.557573, 127.041229], [37.557517, 127.041509], [37.557416, 127.042005], [37.557396, 127.042104], [37.557374, 127.042202], [37.557349, 127.042286], [37.557313, 127.042382], [37.55727, 127.042485], [37.557227, 127.042567], [37.557173, 127.042659], [37.557151, 127.042692], [37.557092, 127.042768], [37.557016, 127.042861], [37.556942, 127.042938], [37.556884, 127.042994], [37.556827, 127.043042], [37.556759, 127.04309], [37.556694, 127.043133], [37.556606, 127.043173], [37.556533, 127.043207], [37.556468, 127.043232], [37.556394, 127.043249], [37.556304, 127.043266], [37.555326, 127.043415], [37.554774, 127.043493], [37.554352, 127.043558], [37.553837, 127.043648], [37.553728, 127.043664], [37.551724, 127.04396], [37.551606, 127.043956], [37.551558, 127.043954], [37.551508, 127.043951], [37.551379, 127.043959], [37.55121, 127.04397], [37.551007, 127.043989], [37.550675, 127.044026], [37.550182, 127.044099], [37.54979, 127.044161], [37.549734, 127.044168], [37.549692, 127.044174], [37.548448, 127.044369], [37.548202, 127.044403], [37.548088, 127.044419], [37.548049, 127.044533], [37.547416, 127.046621], [37.546881, 127.04828], [37.546721, 127.048757], [37.546527, 127.049386], [37.546439, 127.049677], [37.546355, 127.049952], [37.546242, 127.050328], [37.545692, 127.0521], [37.545299, 127.053402], [37.545108, 127.054061], [37.544767, 127.055168], [37.544556, 127.055879]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_6d58384df979e324e34f345298ea0757.bindTooltip(
+                `<div>
+                     Vehicle 2: C2 -> C8 (5.73 km, 7.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_0d022720e049696aa5817534382b2a1f = L.polyline(
+                [[37.544556, 127.055879], [37.544379, 127.056477], [37.54388, 127.056251], [37.544263, 127.054936], [37.544767, 127.055168], [37.544834, 127.055206], [37.544897, 127.055239], [37.545235, 127.054116], [37.545879, 127.051959], [37.546355, 127.050373], [37.546859, 127.048731], [37.547543, 127.046616], [37.547707, 127.046025], [37.547793, 127.045744], [37.548169, 127.044532], [37.548173, 127.044518], [37.548431, 127.044485], [37.549293, 127.044366], [37.549792, 127.044297], [37.550678, 127.044166], [37.551012, 127.044131], [37.551356, 127.044111], [37.551474, 127.044106], [37.551522, 127.044107], [37.551574, 127.044107], [37.551714, 127.044105], [37.553846, 127.04377], [37.553929, 127.043753], [37.556359, 127.043362], [37.556453, 127.04334], [37.556539, 127.043315], [37.556648, 127.043269], [37.556721, 127.043233], [37.556789, 127.043191], [37.556863, 127.043144], [37.556917, 127.043107], [37.556979, 127.04306], [37.557036, 127.043008], [37.557089, 127.042952], [37.557133, 127.0429], [37.5572, 127.042813], [37.557255, 127.042729], [37.557306, 127.042649], [37.55736, 127.042544], [37.557413, 127.042423], [37.557454, 127.042301], [37.557481, 127.0422], [37.55752, 127.042025], [37.557618, 127.041541], [37.557733, 127.040983], [37.557776, 127.040759], [37.557813, 127.040575], [37.557863, 127.040295], [37.557895, 127.040109], [37.557953, 127.039766], [37.558082, 127.039422], [37.558242, 127.039016], [37.558224, 127.038874], [37.558373, 127.038695], [37.558493, 127.038438], [37.558749, 127.037835], [37.558909, 127.037531], [37.559116, 127.037264], [37.559196, 127.037108], [37.559425, 127.036933], [37.559497, 127.036871], [37.559753, 127.036648], [37.560445, 127.036064], [37.560503, 127.03601], [37.560614, 127.035925], [37.560811, 127.035765], [37.560984, 127.035624], [37.561183, 127.035434], [37.561374, 127.035315], [37.561484, 127.035189], [37.561754, 127.034776], [37.561983, 127.034424], [37.56224, 127.034017], [37.562318, 127.033889], [37.562427, 127.033716], [37.562601, 127.033438], [37.562646, 127.033365], [37.562743, 127.033202], [37.562982, 127.032706], [37.563095, 127.032457], [37.563133, 127.032374], [37.563405, 127.031763], [37.563611, 127.031287], [37.563655, 127.031185], [37.563781, 127.030898], [37.563993, 127.030433], [37.564106, 127.03019], [37.564171, 127.03005], [37.564266, 127.029829], [37.564326, 127.029692], [37.564385, 127.029548], [37.564402, 127.029499], [37.564539, 127.029113], [37.564635, 127.028714], [37.564757, 127.028145], [37.56478, 127.028036], [37.564805, 127.027932], [37.564927, 127.027398], [37.565024, 127.026939], [37.565054, 127.026718], [37.565072, 127.026399], [37.56509, 127.026019], [37.565099, 127.025831], [37.565109, 127.025612], [37.565129, 127.025162], [37.565142, 127.024758], [37.565162, 127.024179], [37.565176, 127.023848], [37.565192, 127.023569], [37.56521, 127.02346], [37.565214, 127.023438], [37.565238, 127.023287], [37.56539, 127.02234], [37.565418, 127.022218], [37.56548, 127.02194], [37.565539, 127.021597], [37.56557, 127.02142], [37.565617, 127.021174], [37.56564, 127.02102], [37.56566, 127.02066], [37.56567, 127.01997], [37.565666, 127.019754], [37.565665, 127.019671], [37.565663, 127.019567], [37.56566, 127.01943], [37.565653, 127.019199], [37.56564, 127.01873], [37.565629, 127.018631], [37.5656, 127.01838], [37.56558, 127.01819], [37.565574, 127.01812], [37.565545, 127.017847], [37.56553, 127.01765], [37.565502, 127.017419], [37.565481, 127.017189], [37.56546, 127.01702], [37.565445, 127.016911], [37.565378, 127.016473], [37.56535, 127.01622], [37.565317, 127.01592], [37.565293, 127.015725], [37.565288, 127.01568], [37.565271, 127.015538], [37.565196, 127.014897], [37.56517, 127.014645], [37.56516, 127.01456], [37.565124, 127.01424], [37.565108, 127.014118], [37.56503, 127.01349], [37.565009, 127.013287], [37.56497, 127.01291], [37.564957, 127.012785], [37.564921, 127.012445], [37.564911, 127.012342], [37.564897, 127.01155], [37.56483, 127.011118], [37.564813, 127.011014], [37.564766, 127.010767], [37.56471, 127.010452], [37.56467, 127.01021], [37.56463, 127.00993], [37.564581, 127.009756], [37.564579, 127.009738], [37.564524, 127.009315], [37.56452, 127.00929], [37.56446, 127.008932], [37.564392, 127.008522], [37.564305, 127.007936], [37.564237, 127.007515], [37.56423, 127.00746], [37.564198, 127.007179], [37.564147, 127.006815], [37.56412, 127.00663], [37.563957, 127.005929], [37.563849, 127.005458], [37.56373, 127.00492], [37.563668, 127.004629], [37.563513, 127.003901], [37.563455, 127.003644], [37.563245, 127.002776], [37.563193, 127.002572], [37.563146, 127.00236], [37.563081, 127.001868], [37.563054, 127.001748], [37.562923, 127.001266], [37.562872, 127.000932], [37.562491, 126.999221], [37.562455, 126.999064], [37.562309, 126.998471], [37.562115, 126.997609], [37.562054, 126.997342], [37.561934, 126.996867], [37.561896, 126.996711], [37.561795, 126.99628], [37.561728, 126.996012], [37.561666, 126.995766], [37.561659, 126.995738], [37.561555, 126.995248], [37.561298, 126.994209], [37.561137, 126.993629], [37.561126, 126.993564], [37.561117, 126.993492], [37.561113, 126.993455], [37.561106, 126.99338], [37.561128, 126.993188], [37.561118, 126.993079], [37.561119, 126.993024], [37.561119, 126.992938], [37.561124, 126.992667], [37.561125, 126.992205], [37.561135, 126.991842], [37.561116, 126.991582], [37.561113, 126.991413], [37.561114, 126.991193], [37.561125, 126.991061], [37.561152, 126.990772], [37.561153, 126.990544], [37.561235, 126.990014], [37.561266, 126.989636], [37.561258, 126.989346], [37.561193, 126.988679], [37.561072, 126.987502], [37.561042, 126.986853], [37.561031, 126.986702], [37.560976, 126.986304], [37.560941, 126.985997], [37.560914, 126.985756], [37.560833, 126.98504], [37.560801, 126.984751], [37.560742, 126.984041], [37.56069, 126.983415], [37.560654, 126.98297], [37.560625, 126.982716], [37.560626, 126.982665], [37.560576, 126.982442], [37.560543, 126.982337], [37.560524, 126.982277], [37.560452, 126.982055], [37.560381, 126.98188], [37.560244, 126.981659], [37.560219, 126.981621], [37.559908, 126.981146], [37.559773, 126.98085], [37.559694, 126.980592], [37.559489, 126.979883], [37.559485, 126.97987], [37.559308, 126.979143], [37.559163, 126.978817], [37.559065, 126.978665], [37.558861, 126.978402], [37.558657, 126.978207], [37.55834, 126.977893], [37.55812, 126.977641], [37.558046, 126.977544], [37.557833, 126.977141], [37.557708, 126.97685], [37.557701, 126.976835], [37.557634, 126.976682], [37.557491, 126.976303], [37.557396, 126.976055], [37.557219, 126.975545], [37.55715, 126.975343], [37.556776, 126.974264], [37.556591, 126.973731], [37.556581, 126.973625], [37.556585, 126.973478], [37.55659, 126.973402], [37.556623, 126.973308], [37.556711, 126.973166], [37.5568, 126.973016], [37.556863, 126.972897], [37.556975, 126.972711], [37.557021, 126.972631], [37.557087, 126.972534], [37.557218, 126.97236], [37.557284, 126.972276], [37.557357, 126.972207], [37.557477, 126.972108], [37.557719, 126.971945], [37.557811, 126.971908], [37.557843, 126.971901], [37.5582, 126.971798], [37.558454, 126.971818], [37.558501, 126.971818], [37.558814, 126.971747], [37.559247, 126.971639], [37.559471, 126.971564], [37.55961, 126.971517], [37.559593, 126.971291], [37.559581, 126.971121], [37.55958, 126.9711], [37.559537, 126.970543], [37.55949, 126.96993], [37.559441, 126.969306], [37.55935, 126.969123], [37.559319, 126.969063], [37.559288, 126.969009], [37.559192, 126.968873], [37.559103, 126.968973], [37.558952, 126.969128], [37.55886, 126.969205], [37.558735, 126.969305], [37.55863, 126.969327], [37.558352, 126.969313], [37.558181, 126.969304], [37.558051, 126.969217], [37.557504, 126.969087], [37.557363, 126.969039], [37.557336, 126.969035], [37.556944, 126.968971], [37.556214, 126.968937], [37.555684, 126.968932], [37.555428, 126.968926], [37.555294, 126.968923], [37.555276, 126.968923], [37.555196, 126.968923], [37.555168, 126.968927], [37.555113, 126.968933], [37.555052, 126.968941], [37.554877, 126.968955], [37.554584, 126.968988], [37.554547, 126.968992], [37.554355, 126.968998], [37.554044, 126.968994], [37.553929, 126.968994], [37.553481, 126.968995], [37.55313, 126.969001], [37.553017, 126.969011], [37.552793, 126.969066], [37.552669, 126.969101], [37.552684, 126.96919], [37.552986, 126.969112], [37.553241, 126.969098], [37.553425, 126.969087], [37.553712, 126.969089], [37.553852, 126.96928], [37.554111, 126.969632], [37.554298, 126.969809], [37.55439, 126.969841], [37.55469, 126.969835]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_0d022720e049696aa5817534382b2a1f.bindTooltip(
+                `<div>
+                     Vehicle 2: C8 -> C3 (10.63 km, 13.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_ab629a29a01d84135aa916afc7599045 = L.polyline(
+                [[37.55469, 126.969835], [37.555004, 126.969828], [37.555072, 126.969812], [37.555158, 126.969756], [37.555217, 126.96967], [37.555281, 126.969511], [37.555296, 126.969396], [37.555289, 126.969129], [37.555288, 126.969112], [37.55536, 126.969114], [37.555425, 126.969115], [37.555462, 126.969116], [37.556203, 126.969136], [37.556501, 126.96916], [37.556859, 126.969162], [37.557261, 126.969193], [37.557302, 126.969196], [37.557327, 126.969198], [37.557591, 126.96926], [37.557827, 126.969315], [37.558048, 126.969366], [37.558181, 126.969304], [37.558352, 126.969313], [37.55863, 126.969327], [37.558735, 126.969305], [37.55886, 126.969205], [37.558952, 126.969128], [37.559103, 126.968973], [37.559192, 126.968873], [37.559304, 126.968726], [37.559432, 126.968592], [37.559477, 126.968547], [37.55956, 126.968485], [37.559674, 126.968418], [37.559881, 126.968313], [37.560982, 126.967759], [37.561341, 126.967577], [37.56142, 126.967537], [37.561443, 126.967644], [37.561544, 126.968127], [37.561567, 126.968238], [37.561705, 126.968805], [37.561719, 126.968859], [37.561912, 126.969652], [37.561947, 126.969799], [37.561986, 126.969959], [37.562373, 126.971547], [37.562483, 126.971999], [37.562484, 126.972003], [37.562649, 126.972372], [37.562678, 126.972495], [37.562821, 126.973099], [37.562855, 126.973243], [37.563052, 126.974076], [37.563068, 126.974139], [37.563322, 126.974835], [37.563351, 126.974915], [37.563529, 126.975342], [37.563667, 126.975672], [37.563745, 126.97586], [37.563806, 126.976007], [37.563857, 126.976234], [37.563966, 126.976587], [37.563985, 126.976742], [37.563996, 126.976829], [37.56396, 126.976972], [37.564171, 126.977038], [37.564462, 126.977128], [37.56462, 126.977182], [37.564655, 126.977194], [37.564706, 126.977204], [37.564844, 126.977209], [37.564928, 126.977213], [37.565103, 126.977221], [37.565242, 126.977226], [37.565403, 126.977227], [37.566596, 126.97723], [37.56688, 126.977239], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568029, 126.977296], [37.56804, 126.977347], [37.568128, 126.977752], [37.568189, 126.978025], [37.568165, 126.978309], [37.56756, 126.978261], [37.567007, 126.978164], [37.567005, 126.977993]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_ab629a29a01d84135aa916afc7599045.bindTooltip(
+                `<div>
+                     Vehicle 2: C3 -> Depot (2.42 km, 3.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f25c860f65b838d43f9e17fc70dbe8c0 = L.polyline(
+                [[37.55469, 126.969835], [37.555004, 126.969828], [37.555072, 126.969812], [37.555158, 126.969756], [37.555217, 126.96967], [37.555281, 126.969511], [37.555296, 126.969396], [37.555289, 126.969129], [37.555288, 126.969112], [37.55536, 126.969114], [37.555425, 126.969115], [37.555462, 126.969116], [37.556203, 126.969136], [37.556501, 126.96916], [37.556859, 126.969162], [37.557261, 126.969193], [37.557302, 126.969196], [37.557327, 126.969198], [37.557591, 126.96926], [37.557827, 126.969315], [37.558048, 126.969366], [37.558181, 126.969304], [37.558352, 126.969313], [37.55863, 126.969327], [37.558735, 126.969305], [37.55886, 126.969205], [37.558952, 126.969128], [37.559103, 126.968973], [37.559192, 126.968873], [37.559304, 126.968726], [37.559432, 126.968592], [37.559477, 126.968547], [37.55956, 126.968485], [37.559674, 126.968418], [37.559881, 126.968313], [37.560982, 126.967759], [37.561341, 126.967577], [37.56142, 126.967537], [37.561443, 126.967644], [37.561544, 126.968127], [37.561567, 126.968238], [37.561705, 126.968805], [37.561719, 126.968859], [37.561912, 126.969652], [37.561947, 126.969799], [37.561986, 126.969959], [37.562373, 126.971547], [37.562483, 126.971999], [37.562484, 126.972003], [37.562649, 126.972372], [37.562678, 126.972495], [37.562821, 126.973099], [37.562855, 126.973243], [37.563052, 126.974076], [37.563068, 126.974139], [37.563322, 126.974835], [37.563351, 126.974915], [37.563529, 126.975342], [37.563667, 126.975672], [37.563745, 126.97586], [37.563806, 126.976007], [37.563857, 126.976234], [37.563966, 126.976587], [37.563985, 126.976742], [37.563996, 126.976829], [37.56396, 126.976972], [37.564171, 126.977038], [37.564462, 126.977128], [37.56462, 126.977182], [37.564655, 126.977194], [37.564706, 126.977204], [37.564844, 126.977209], [37.564928, 126.977213], [37.565103, 126.977221], [37.565242, 126.977226], [37.565403, 126.977227], [37.566596, 126.97723], [37.56688, 126.977239], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.569406, 126.977216], [37.569612, 126.977214], [37.569818, 126.97721], [37.569995, 126.977209], [37.570049, 126.977208], [37.57014, 126.977213], [37.5702, 126.977218], [37.570242, 126.977222], [37.57028, 126.977227], [37.57028, 126.977076], [37.57028, 126.976901], [37.570279, 126.976839], [37.570279, 126.976751], [37.570278, 126.976563], [37.570274, 126.975599], [37.570225, 126.974994], [37.570203, 126.974715], [37.570197, 126.973862], [37.570194, 126.973268], [37.570533, 126.973243], [37.5708, 126.973243]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_f25c860f65b838d43f9e17fc70dbe8c0.bindTooltip(
+                `<div>
+                     V2 delivery at C3: C3 -> S1 (2.85 km, 4.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_ccbc07b43f15f1cdb8369810d03ee9e7 = L.polyline(
+                [[37.5708, 126.973243], [37.570533, 126.973243], [37.570194, 126.973268], [37.570189, 126.972549], [37.570186, 126.971956], [37.570063, 126.971646], [37.569985, 126.971447], [37.569819, 126.971157], [37.569772, 126.971088], [37.569481, 126.970662], [37.56931, 126.970408], [37.569099, 126.970149], [37.568961, 126.970025], [37.568368, 126.969107], [37.568101, 126.968832], [37.567571, 126.968325], [37.567105, 126.967859], [37.566821, 126.96754], [37.566557, 126.967264], [37.566322, 126.967018], [37.566067, 126.966774], [37.565974, 126.966687], [37.56587, 126.966583], [37.565758, 126.966726], [37.565663, 126.966855], [37.565255, 126.967145], [37.565113, 126.967262], [37.56485, 126.96749], [37.564617, 126.967644], [37.563744, 126.968271], [37.563304, 126.968636], [37.563257, 126.968668], [37.562945, 126.968893], [37.562754, 126.969033], [37.5623, 126.969367], [37.562162, 126.969469], [37.562085, 126.969525], [37.561912, 126.969652], [37.561744, 126.969772], [37.561708, 126.9698], [37.560498, 126.97072], [37.560159, 126.970955], [37.55982, 126.971138], [37.559778, 126.971166], [37.559734, 126.971196], [37.559593, 126.971291], [37.559434, 126.971332], [37.559355, 126.971352], [37.558996, 126.971443], [37.558531, 126.971513], [37.558285, 126.971554], [37.557793, 126.971658], [37.557552, 126.971773], [37.557339, 126.971887], [37.557169, 126.972037], [37.556897, 126.972311], [37.556784, 126.972433], [37.556715, 126.972424], [37.556467, 126.972484], [37.556319, 126.97252], [37.556099, 126.972579], [37.555868, 126.972568], [37.555453, 126.972505], [37.554879, 126.972508], [37.554806, 126.972509], [37.554552, 126.972518], [37.554269, 126.972572], [37.553712, 126.972615], [37.553263, 126.972593], [37.552788, 126.97247], [37.552442, 126.972387]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_ccbc07b43f15f1cdb8369810d03ee9e7.bindTooltip(
+                `<div>
+                     V2 delivery at C3: S1 -> S2 (2.50 km, 3.2 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_50654b29c2680f5eee92df7bc2786a33 = L.polyline(
+                [[37.552442, 126.972387], [37.552176, 126.972323], [37.55138, 126.972138], [37.551109, 126.972062], [37.55037, 126.971878], [37.549502, 126.971663], [37.549349, 126.971645], [37.549278, 126.971559], [37.549267, 126.971546], [37.549207, 126.971479], [37.549148, 126.971405], [37.548638, 126.97073], [37.54863, 126.970719], [37.5482, 126.970128], [37.54839, 126.970098], [37.548415, 126.970095], [37.548827, 126.970047], [37.549106, 126.970022], [37.549168, 126.970017], [37.549192, 126.970011], [37.549656, 126.969892], [37.549994, 126.969816], [37.55071, 126.969668], [37.550911, 126.969636], [37.55163, 126.969461], [37.552362, 126.969273], [37.552684, 126.96919], [37.552986, 126.969112], [37.553241, 126.969098], [37.553425, 126.969087], [37.553712, 126.969089], [37.553852, 126.96928], [37.554111, 126.969632], [37.554298, 126.969809], [37.55439, 126.969841], [37.55469, 126.969835]],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            poly_line_50654b29c2680f5eee92df7bc2786a33.bindTooltip(
+                `<div>
+                     V2 delivery at C3: S2 -> C3 (1.29 km, 2.0 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_633963a48e88f7b46a337913912fddf0 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            var div_icon_7b1e4402cf9721689ff9bfe5bc844e59 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: darkred;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        0\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_c1621e515cc39bbc977da7bef41b1b98 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_31d996855ec642d97227ac6fffcc0b07 = $(`<div id="html_31d996855ec642d97227ac6fffcc0b07" style="width: 100.0%; height: 100.0%;"><b>Vehicle 2</b><br>Order: 0<br>Node: Depot<br>Type: Depot start<br>Arrival: 0.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: 0.0 min<br></div>`)[0];
+                popup_c1621e515cc39bbc977da7bef41b1b98.setContent(html_31d996855ec642d97227ac6fffcc0b07);
+            
+        
+
+        marker_633963a48e88f7b46a337913912fddf0.bindPopup(popup_c1621e515cc39bbc977da7bef41b1b98)
+        ;
+
+        
+    
+    
+            marker_633963a48e88f7b46a337913912fddf0.bindTooltip(
+                `<div>
+                     V2-0-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_633963a48e88f7b46a337913912fddf0.setIcon(div_icon_7b1e4402cf9721689ff9bfe5bc844e59);
+            
+    
+            var marker_f14c834cb7c67ab273a0b19afb000172 = L.marker(
+                [37.5663, 127.0093],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            var div_icon_5fd211fad99041dfcbfa6913dd211284 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: darkred;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        1\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_3bb2ee99ed4290a92212edee8a8df6e1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e1d343cf909dee9d6f6d35f25071c3cf = $(`<div id="html_e1d343cf909dee9d6f6d35f25071c3cf" style="width: 100.0%; height: 100.0%;"><b>Vehicle 2</b><br>Order: 1<br>Node: C2<br>Type: Charging customer<br>Arrival: 30.0 min<br>Service: 18.0 min<br>Delivery tour: 0.0 min<br>Departure: 48.0 min<br></div>`)[0];
+                popup_3bb2ee99ed4290a92212edee8a8df6e1.setContent(html_e1d343cf909dee9d6f6d35f25071c3cf);
+            
+        
+
+        marker_f14c834cb7c67ab273a0b19afb000172.bindPopup(popup_3bb2ee99ed4290a92212edee8a8df6e1)
+        ;
+
+        
+    
+    
+            marker_f14c834cb7c67ab273a0b19afb000172.bindTooltip(
+                `<div>
+                     V2-1-C2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f14c834cb7c67ab273a0b19afb000172.setIcon(div_icon_5fd211fad99041dfcbfa6913dd211284);
+            
+    
+            var marker_f578e5b0faa4572c8a6153fe6cae959e = L.marker(
+                [37.5446, 127.0559],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            var div_icon_2b2741f0a75f0cec667127b86ffdc706 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: darkred;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        2\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_596cd48f6b0999be88bafc0f5192fbdd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5c62a673cb300265df36b75eab7740b1 = $(`<div id="html_5c62a673cb300265df36b75eab7740b1" style="width: 100.0%; height: 100.0%;"><b>Vehicle 2</b><br>Order: 2<br>Node: C8<br>Type: Charging customer<br>Arrival: 55.3 min<br>Service: 20.0 min<br>Delivery tour: 0.0 min<br>Departure: 75.3 min<br></div>`)[0];
+                popup_596cd48f6b0999be88bafc0f5192fbdd.setContent(html_5c62a673cb300265df36b75eab7740b1);
+            
+        
+
+        marker_f578e5b0faa4572c8a6153fe6cae959e.bindPopup(popup_596cd48f6b0999be88bafc0f5192fbdd)
+        ;
+
+        
+    
+    
+            marker_f578e5b0faa4572c8a6153fe6cae959e.bindTooltip(
+                `<div>
+                     V2-2-C8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f578e5b0faa4572c8a6153fe6cae959e.setIcon(div_icon_2b2741f0a75f0cec667127b86ffdc706);
+            
+    
+            var marker_0bf35acdf50decfb06b3621b28dca9c9 = L.marker(
+                [37.5547, 126.9706],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            var div_icon_41ce9554ad8c3869616b97ce306704bd = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: darkred;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        3\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_dea2ecf6e2ac6c410ab188a4b5587b38 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_28829e9fa86c45bd831273748079a257 = $(`<div id="html_28829e9fa86c45bd831273748079a257" style="width: 100.0%; height: 100.0%;"><b>Vehicle 2</b><br>Order: 3<br>Node: C3<br>Type: Charging customer<br>Arrival: 88.6 min<br>Service: 10.0 min<br>Delivery tour: 20.2 min<br>Departure: 118.8 min<br>Delivery: C3 -> S1 -> S2 -> C3</div>`)[0];
+                popup_dea2ecf6e2ac6c410ab188a4b5587b38.setContent(html_28829e9fa86c45bd831273748079a257);
+            
+        
+
+        marker_0bf35acdf50decfb06b3621b28dca9c9.bindPopup(popup_dea2ecf6e2ac6c410ab188a4b5587b38)
+        ;
+
+        
+    
+    
+            marker_0bf35acdf50decfb06b3621b28dca9c9.bindTooltip(
+                `<div>
+                     V2-3-C3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0bf35acdf50decfb06b3621b28dca9c9.setIcon(div_icon_41ce9554ad8c3869616b97ce306704bd);
+            
+    
+            var marker_c26b4af5ad36b9fcf0016bc8c4ce5a1f = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_46bcd91657db77e41a6dd63640bedf0b);
+        
+    
+            var div_icon_3733d1bb39a7b49929f0968f188d5163 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: darkred;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        R\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_efb3af06b356859efb2287cfcd41bafe = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8982343d9107b8095cadbf929739a6b4 = $(`<div id="html_8982343d9107b8095cadbf929739a6b4" style="width: 100.0%; height: 100.0%;"><b>Vehicle 2</b><br>Order: 4<br>Node: Depot<br>Type: Depot return<br>Arrival: 600.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: -<br></div>`)[0];
+                popup_efb3af06b356859efb2287cfcd41bafe.setContent(html_8982343d9107b8095cadbf929739a6b4);
+            
+        
+
+        marker_c26b4af5ad36b9fcf0016bc8c4ce5a1f.bindPopup(popup_efb3af06b356859efb2287cfcd41bafe)
+        ;
+
+        
+    
+    
+            marker_c26b4af5ad36b9fcf0016bc8c4ce5a1f.bindTooltip(
+                `<div>
+                     V2-4-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c26b4af5ad36b9fcf0016bc8c4ce5a1f.setIcon(div_icon_3733d1bb39a7b49929f0968f188d5163);
+            
+    
+            feature_group_46bcd91657db77e41a6dd63640bedf0b.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var feature_group_c52ac73283ec7b4ba381dbc3a002b85f = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_94a754ae8d9b86e7975b9e7aa959788a = L.circleMarker(
+                [37.5737, 126.98],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_2b3c021f978e267c0e82c38f713fa121 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d59e18b51c7e35e7c1eeeffce38fe044 = $(`<div id="html_d59e18b51c7e35e7c1eeeffce38fe044" style="width: 100.0%; height: 100.0%;"><b>Satellite S0</b><br>Type: delivery<br>Assignment: Vehicle V0, hub C1</div>`)[0];
+                popup_2b3c021f978e267c0e82c38f713fa121.setContent(html_d59e18b51c7e35e7c1eeeffce38fe044);
+            
+        
+
+        circle_marker_94a754ae8d9b86e7975b9e7aa959788a.bindPopup(popup_2b3c021f978e267c0e82c38f713fa121)
+        ;
+
+        
+    
+    
+            circle_marker_94a754ae8d9b86e7975b9e7aa959788a.bindTooltip(
+                `<div>
+                     S0 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c7ff4e37eaba4424b2bab9965356c837 = L.marker(
+                [37.5737, 126.98],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_392f107576c098d1ecf87a109899aa2e = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S0\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_c7ff4e37eaba4424b2bab9965356c837.setIcon(div_icon_392f107576c098d1ecf87a109899aa2e);
+            
+    
+            var circle_marker_7c791010b4ee194867fea66db5d9c7dd = L.circleMarker(
+                [37.5708, 126.9735],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_34eacb24a75880fe43571135023ef465 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3c8505401a4f6ac2ed94ca722e9b1521 = $(`<div id="html_3c8505401a4f6ac2ed94ca722e9b1521" style="width: 100.0%; height: 100.0%;"><b>Satellite S1</b><br>Type: delivery<br>Assignment: Vehicle V2, hub C3</div>`)[0];
+                popup_34eacb24a75880fe43571135023ef465.setContent(html_3c8505401a4f6ac2ed94ca722e9b1521);
+            
+        
+
+        circle_marker_7c791010b4ee194867fea66db5d9c7dd.bindPopup(popup_34eacb24a75880fe43571135023ef465)
+        ;
+
+        
+    
+    
+            circle_marker_7c791010b4ee194867fea66db5d9c7dd.bindTooltip(
+                `<div>
+                     S1 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_51fcc7fc57c600248850bac2c781699c = L.marker(
+                [37.5708, 126.9735],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_4d42cf59194f32e2fbefe15e8d9e4f30 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S1\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_51fcc7fc57c600248850bac2c781699c.setIcon(div_icon_4d42cf59194f32e2fbefe15e8d9e4f30);
+            
+    
+            var circle_marker_2fe2c2fe4f2ed32147167c11285daeaa = L.circleMarker(
+                [37.5525, 126.972],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_fda560206e8e31220c65da00f6d2ad69 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b1191af272124d1669ac372760e46ff1 = $(`<div id="html_b1191af272124d1669ac372760e46ff1" style="width: 100.0%; height: 100.0%;"><b>Satellite S2</b><br>Type: delivery<br>Assignment: Vehicle V2, hub C3</div>`)[0];
+                popup_fda560206e8e31220c65da00f6d2ad69.setContent(html_b1191af272124d1669ac372760e46ff1);
+            
+        
+
+        circle_marker_2fe2c2fe4f2ed32147167c11285daeaa.bindPopup(popup_fda560206e8e31220c65da00f6d2ad69)
+        ;
+
+        
+    
+    
+            circle_marker_2fe2c2fe4f2ed32147167c11285daeaa.bindTooltip(
+                `<div>
+                     S2 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ebe7b6bb7bde3c381d67c81989450bb3 = L.marker(
+                [37.5525, 126.972],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_681f593c0f126af0a4ac8bfbd8f57df4 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S2\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_ebe7b6bb7bde3c381d67c81989450bb3.setIcon(div_icon_681f593c0f126af0a4ac8bfbd8f57df4);
+            
+    
+            var circle_marker_1b189895e1e891633f277006382ec3ef = L.circleMarker(
+                [37.5195, 126.927],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_dc627e57fcaa490e74b5014a903b4977 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3bf36bc72fd315cbfb573922ea1480d1 = $(`<div id="html_3bf36bc72fd315cbfb573922ea1480d1" style="width: 100.0%; height: 100.0%;"><b>Satellite S3</b><br>Type: delivery<br>Assignment: Vehicle V0, hub C4</div>`)[0];
+                popup_dc627e57fcaa490e74b5014a903b4977.setContent(html_3bf36bc72fd315cbfb573922ea1480d1);
+            
+        
+
+        circle_marker_1b189895e1e891633f277006382ec3ef.bindPopup(popup_dc627e57fcaa490e74b5014a903b4977)
+        ;
+
+        
+    
+    
+            circle_marker_1b189895e1e891633f277006382ec3ef.bindTooltip(
+                `<div>
+                     S3 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_dd88a856b8bf3eb3e013e49a2719e108 = L.marker(
+                [37.5195, 126.927],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_fec90531c6cdc47552fdcf87084d2166 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S3\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_dd88a856b8bf3eb3e013e49a2719e108.setIcon(div_icon_fec90531c6cdc47552fdcf87084d2166);
+            
+    
+            var circle_marker_5a2d02cd25a0890e8010eadd62825a71 = L.circleMarker(
+                [37.4995, 127.031],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_7667697225718ab584450f9ffc430281 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_42930eae683f519fb8b5a6a525f49f8e = $(`<div id="html_42930eae683f519fb8b5a6a525f49f8e" style="width: 100.0%; height: 100.0%;"><b>Satellite S4</b><br>Type: delivery<br>Assignment: Vehicle V1, hub C5</div>`)[0];
+                popup_7667697225718ab584450f9ffc430281.setContent(html_42930eae683f519fb8b5a6a525f49f8e);
+            
+        
+
+        circle_marker_5a2d02cd25a0890e8010eadd62825a71.bindPopup(popup_7667697225718ab584450f9ffc430281)
+        ;
+
+        
+    
+    
+            circle_marker_5a2d02cd25a0890e8010eadd62825a71.bindTooltip(
+                `<div>
+                     S4 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_bf9550720cfb2633473ba68b4117acd8 = L.marker(
+                [37.4995, 127.031],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_e88cf03953c088f7af2646fa3cba9c69 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S4\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_bf9550720cfb2633473ba68b4117acd8.setIcon(div_icon_e88cf03953c088f7af2646fa3cba9c69);
+            
+    
+            var circle_marker_190e397cbe06530e01784b7937252aab = L.circleMarker(
+                [37.5115, 127.0965],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_54359b8effc365e86dda1f787f572d0e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5e2a12fa6d15769315084d9c2af3396a = $(`<div id="html_5e2a12fa6d15769315084d9c2af3396a" style="width: 100.0%; height: 100.0%;"><b>Satellite S5</b><br>Type: delivery<br>Assignment: Vehicle V1, hub C6</div>`)[0];
+                popup_54359b8effc365e86dda1f787f572d0e.setContent(html_5e2a12fa6d15769315084d9c2af3396a);
+            
+        
+
+        circle_marker_190e397cbe06530e01784b7937252aab.bindPopup(popup_54359b8effc365e86dda1f787f572d0e)
+        ;
+
+        
+    
+    
+            circle_marker_190e397cbe06530e01784b7937252aab.bindTooltip(
+                `<div>
+                     S5 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2189418195ef195c6d93597c39bbde9f = L.marker(
+                [37.5115, 127.0965],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_15f59d8beb6f3e13486d7714cd003028 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S5\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_2189418195ef195c6d93597c39bbde9f.setIcon(div_icon_15f59d8beb6f3e13486d7714cd003028);
+            
+    
+            var circle_marker_68228f1027f6251032967c02c49e8e11 = L.circleMarker(
+                [37.5575, 126.9215],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+        var popup_c211dc854e80cfbc703ecb9e01364926 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5a750849e10b385f8fbb29074d8724f8 = $(`<div id="html_5a750849e10b385f8fbb29074d8724f8" style="width: 100.0%; height: 100.0%;"><b>Satellite S6</b><br>Type: delivery<br>Assignment: Vehicle V0, hub C7</div>`)[0];
+                popup_c211dc854e80cfbc703ecb9e01364926.setContent(html_5a750849e10b385f8fbb29074d8724f8);
+            
+        
+
+        circle_marker_68228f1027f6251032967c02c49e8e11.bindPopup(popup_c211dc854e80cfbc703ecb9e01364926)
+        ;
+
+        
+    
+    
+            circle_marker_68228f1027f6251032967c02c49e8e11.bindTooltip(
+                `<div>
+                     S6 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_45e01bf80416156dfcb7927bf3e57d3c = L.marker(
+                [37.5575, 126.9215],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_c52ac73283ec7b4ba381dbc3a002b85f);
+        
+    
+            var div_icon_9fd2cc3e065f35940865e64e578c8ea8 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S6\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_45e01bf80416156dfcb7927bf3e57d3c.setIcon(div_icon_9fd2cc3e065f35940865e64e578c8ea8);
+            
+    
+            feature_group_c52ac73283ec7b4ba381dbc3a002b85f.addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+        
+    
+            var layer_control_6219b14f150a1c34fac1d328bcd84609_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_2594cab35cd442fcddcaca35ea1d4a03,
+                },
+                overlays :  {
+                    "Charging Customers" : feature_group_3a96c4d850352089df99043eaaee1348,
+                    "Vehicle 0" : feature_group_ea31d54038ca9f63503ff08855a4823e,
+                    "Vehicle 1" : feature_group_95d1df0fada95df7931d58d200fb1938,
+                    "Vehicle 2" : feature_group_46bcd91657db77e41a6dd63640bedf0b,
+                    "Delivery Satellites" : feature_group_c52ac73283ec7b4ba381dbc3a002b85f,
+                },
+            };
+            let layer_control_6219b14f150a1c34fac1d328bcd84609 = L.control.layers(
+                layer_control_6219b14f150a1c34fac1d328bcd84609_layers.base_layers,
+                layer_control_6219b14f150a1c34fac1d328bcd84609_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_da5b729d80f6414adf66f4ab7efa2fe5);
+
+        
+    
+            map_da5b729d80f6414adf66f4ab7efa2fe5.fitBounds(
+                [[37.5665, 126.978], [37.5729, 126.9769], [37.5663, 127.0093], [37.5547, 126.9706], [37.5219, 126.9245], [37.4979, 127.0276], [37.5133, 127.1], [37.5563, 126.9236], [37.5446, 127.0559], [37.5737, 126.98], [37.5708, 126.9735], [37.5525, 126.972], [37.5195, 126.927], [37.4995, 127.031], [37.5115, 127.0965], [37.5575, 126.9215]],
+                {}
+            );
+        
+</script>
+</html>
