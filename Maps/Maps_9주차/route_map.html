@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>전기차 배달 최적화 경로</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; }
+        #map { height: 100vh; width: 100%; }
+        .info-box {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-width: 320px;
+            font-size: 14px;
+        }
+        .info-box h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #333;
+            border-bottom: 2px solid #4285F4;
+            padding-bottom: 10px;
+        }
+        .stat-item {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stat-label { font-weight: 600; color: #555; }
+        .stat-value { color: #4285F4; font-weight: bold; }
+        .legend-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .marker-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+        }
+        .depot-marker {
+            width: 30px;
+            height: 30px;
+            background: #000000;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+        .customer-marker {
+            width: 24px;
+            height: 24px;
+            background: #4285F4;
+            border-radius: 50%;
+            font-size: 11px;
+        }
+        .satellite-marker {
+            width: 26px;
+            height: 26px;
+            background: #EA4335;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="info-box">
+        <h3>📊 최적화 결과</h3>
+        <div class="stat-item">
+            <span class="stat-label">사용 차량:</span>
+            <span class="stat-value">2대</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">차량 거리:</span>
+            <span class="stat-value">0.13km</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">충전소 투어:</span>
+            <span class="stat-value">0.01km</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">총 거리:</span>
+            <span class="stat-value">0.14km</span>
+        </div>
+
+        <hr>
+
+        <h4 style="margin: 10px 0 8px 0; font-size: 15px;">범례</h4>
+        <div class="legend-item"><div class="legend-color" style="background:#000000;"></div><span>🏢 Depot (시청)</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#4285F4;"></div><span>📦 일반고객 (배달)</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#EA4335;"></div><span>⚡ 충전소</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#FF6B6B;"></div><span>🚗 차량 1 경로</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#4ECDC4;"></div><span>🚗 차량 2 경로</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#45B7D1;"></div><span>🚗 차량 3 경로</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:white; border:2px dashed #555;"></div><span>점선: 충전소 투어</span></div>
+    </div>
+
+    <script>
+        const map = L.map('map').setView([37.56514444444444, 126.99121111111111], 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        function divIcon(className, html) {
+            return L.divIcon({
+                className: '',
+                html: `<div class="marker-label ${className}">${html}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -15]
+            });
+        }
+
+        // Depot 마커
+        L.marker([37.5663, 126.9779], { icon: divIcon('depot-marker', '🏢') })
+            .addTo(map)
+            .bindPopup('Depot (시청)');
+
+        // 일반고객 마커
+        const customers = [{"lat": 37.57, "lng": 126.985, "id": 1, "weight": 10}, {"lat": 37.565, "lng": 127.0, "id": 2, "weight": 15}, {"lat": 37.56, "lng": 126.992, "id": 3, "weight": 8}, {"lat": 37.555, "lng": 127.005, "id": 4, "weight": 12}, {"lat": 37.572, "lng": 126.975, "id": 5, "weight": 7}, {"lat": 37.568, "lng": 126.99, "id": 6, "weight": 20}, {"lat": 37.568, "lng": 127.008, "id": 7, "weight": 9}, {"lat": 37.562, "lng": 126.988, "id": 8, "weight": 14}];
+        customers.forEach(c => {
+            L.marker([c.lat, c.lng], { icon: divIcon('customer-marker', String(c.id)) })
+                .addTo(map)
+                .bindPopup(`고객 C${c.id}<br>배달 ${c.weight}kg`);
+        });
+
+        // 충전소 마커
+        const satellites = [{"lat": 37.5705, "lng": 126.9855, "id": 0, "charge": 5}, {"lat": 37.5695, "lng": 126.9845, "id": 1, "charge": 3}, {"lat": 37.5655, "lng": 127.0005, "id": 2, "charge": 4}, {"lat": 37.5605, "lng": 126.9925, "id": 3, "charge": 3}, {"lat": 37.5598, "lng": 126.9918, "id": 4, "charge": 2}, {"lat": 37.5725, "lng": 126.9755, "id": 5, "charge": 4}, {"lat": 37.5625, "lng": 126.9885, "id": 6, "charge": 3}];
+        satellites.forEach(s => {
+            L.marker([s.lat, s.lng], { icon: divIcon('satellite-marker', '⚡') })
+                .addTo(map)
+                .bindPopup(`충전소 S${s.id}<br>충전 ${s.charge}kW`);
+        });
+
+        // 차량 경로
+        const routes = [{"vehicle": 0, "path": [[37.5663, 126.9779], [37.57, 126.985], [37.568, 126.99], [37.565, 127.0], [37.5663, 126.9779]], "color": "#FF6B6B"}, {"vehicle": 1, "path": [[37.5663, 126.9779], [37.572, 126.975], [37.5663, 126.9779]], "color": "#4ECDC4"}];
+        routes.forEach(r => {
+            L.polyline(r.path, {
+                color: r.color,
+                weight: 5,
+                opacity: 0.75
+            })
+            .addTo(map)
+            .bindPopup(`차량 ${r.vehicle + 1} 경로`);
+        });
+
+        // 충전소 투어 경로
+        const satTours = [{"vehicle": 0, "hub": 1, "path": [[37.57, 126.985], [37.5705, 126.9855], [37.5695, 126.9845], [37.57, 126.985]], "color": "#FF6B6B", "length": 0.0028284271247596953}, {"vehicle": 0, "hub": 2, "path": [[37.565, 127.0], [37.5655, 127.0005], [37.565, 127.0]], "color": "#FF6B6B", "length": 0.0014142135623798477}, {"vehicle": 1, "hub": 5, "path": [[37.572, 126.975], [37.5725, 126.9755], [37.572, 126.975]], "color": "#4ECDC4", "length": 0.001414213562369799}];
+        satTours.forEach(t => {
+            L.polyline(t.path, {
+                color: t.color,
+                weight: 3,
+                opacity: 0.85,
+                dashArray: '6, 8'
+            })
+            .addTo(map)
+            .bindPopup(`차량 ${t.vehicle + 1} - Hub C${t.hub} 충전소 투어<br>거리: ${t.length.toFixed(4)}km`);
+        });
+
+        // 전체 경로가 보이도록 지도 범위 조정
+        const allPoints = [];
+        routes.forEach(r => allPoints.push(...r.path));
+        satTours.forEach(t => allPoints.push(...t.path));
+        customers.forEach(c => allPoints.push([c.lat, c.lng]));
+        satellites.forEach(s => allPoints.push([s.lat, s.lng]));
+        allPoints.push([37.5663, 126.9779]);
+
+        if (allPoints.length > 0) {
+            map.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
+        }
+    </script>
+</body>
+</html>

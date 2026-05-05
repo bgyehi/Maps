@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_26a5d71b26bcff67f567784934b684d8 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    <div style='position: fixed; top: 10px; left: 50px; z-index: 9999; background: white; padding: 10px 14px; border: 1px solid #999; border-radius: 6px;'><b>공휴일 / K=2 / 06:00~07:00</b><br>표시 이벤트 수: 3</div>
+    
+            <div class="folium-map" id="map_26a5d71b26bcff67f567784934b684d8" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_26a5d71b26bcff67f567784934b684d8 = L.map(
+                "map_26a5d71b26bcff67f567784934b684d8",
+                {
+                    center: [37.56896427, 127.0020909],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_de376cc58d011828f79b80dd518cfe1a = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_de376cc58d011828f79b80dd518cfe1a.addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            var marker_c3c1a249677da4b58b346e9e5772e7ea = L.marker(
+                [37.56896427, 127.0020909],
+                {
+}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            var icon_bb88e0146e6945dabf1816d83b09ed18 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "black",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e6fbc1984f463d38beea4d502da4ee55 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d73b89c0bae30a80a04c47129a2635d4 = $(`<div id="html_d73b89c0bae30a80a04c47129a2635d4" style="width: 100.0%; height: 100.0%;">Depot: 청계3 노상공영주차장(코리아몰 앞)</div>`)[0];
+                popup_e6fbc1984f463d38beea4d502da4ee55.setContent(html_d73b89c0bae30a80a04c47129a2635d4);
+            
+        
+
+        marker_c3c1a249677da4b58b346e9e5772e7ea.bindPopup(popup_e6fbc1984f463d38beea4d502da4ee55)
+        ;
+
+        
+    
+    
+            marker_c3c1a249677da4b58b346e9e5772e7ea.bindTooltip(
+                `<div>
+                     Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c3c1a249677da4b58b346e9e5772e7ea.setIcon(icon_bb88e0146e6945dabf1816d83b09ed18);
+            
+    
+            var marker_10291910d9f869520eb024cc0cbb6f2d = L.marker(
+                [37.5681412, 127.0024362],
+                {
+}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            var icon_88b076b14197371aa7aab1e3cadd0c97 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "flash",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_95c58b3c07c981865f7687b4dab8fdcb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9ffd74d8194a745fd844bde98700fe8c = $(`<div id="html_9ffd74d8194a745fd844bde98700fe8c" style="width: 100.0%; height: 100.0%;"><b>MCS 1 - #1</b><br>충전소: 청계5 노상공영주차장<br>시간대: 06시<br>시간창: 06:24~06:37<br>도착: 06:24<br>서비스: 06:24~06:37<br>발생횟수: 1<br>발생비율: 6.70%<br>목적함수 profit: 87.10</div>`)[0];
+                popup_95c58b3c07c981865f7687b4dab8fdcb.setContent(html_9ffd74d8194a745fd844bde98700fe8c);
+            
+        
+
+        marker_10291910d9f869520eb024cc0cbb6f2d.bindPopup(popup_95c58b3c07c981865f7687b4dab8fdcb)
+        ;
+
+        
+    
+    
+            marker_10291910d9f869520eb024cc0cbb6f2d.bindTooltip(
+                `<div>
+                     MCS1-#1: 청계5 노상공영주차장 (06:24~06:37)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_10291910d9f869520eb024cc0cbb6f2d.setIcon(icon_88b076b14197371aa7aab1e3cadd0c97);
+            
+    
+            var marker_a232c11a49395f6a0b6c87225528e823 = L.marker(
+                [37.56692913, 127.0043893],
+                {
+}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            var icon_41bc78f6510bc3bdc6095cc3e3396bf2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "flash",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d5c98b11c71b51aea1c8b5593339d98c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9b0342f47453a3c84c27ecc4af56e014 = $(`<div id="html_9b0342f47453a3c84c27ecc4af56e014" style="width: 100.0%; height: 100.0%;"><b>MCS 1 - #2</b><br>충전소: 훈련원공원 노상공영주차장<br>시간대: 06시<br>시간창: 06:55~07:22<br>도착: 06:55<br>서비스: 06:55~07:22<br>발생횟수: 1<br>발생비율: 6.70%<br>목적함수 profit: 180.90</div>`)[0];
+                popup_d5c98b11c71b51aea1c8b5593339d98c.setContent(html_9b0342f47453a3c84c27ecc4af56e014);
+            
+        
+
+        marker_a232c11a49395f6a0b6c87225528e823.bindPopup(popup_d5c98b11c71b51aea1c8b5593339d98c)
+        ;
+
+        
+    
+    
+            marker_a232c11a49395f6a0b6c87225528e823.bindTooltip(
+                `<div>
+                     MCS1-#2: 훈련원공원 노상공영주차장 (06:55~07:22)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a232c11a49395f6a0b6c87225528e823.setIcon(icon_41bc78f6510bc3bdc6095cc3e3396bf2);
+            
+    
+            var poly_line_52a73e482119f6a08ab9dfdea2530d6e = L.polyline(
+                [[37.56896427, 127.0020909], [37.5681412, 127.0024362], [37.56692913, 127.0043893], [37.56896427, 127.0020909]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.75, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            poly_line_52a73e482119f6a08ab9dfdea2530d6e.bindTooltip(
+                `<div>
+                     MCS 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ef2b749021e3da80fdd9531d4b8a95e8 = L.marker(
+                [37.56762877, 126.9795662],
+                {
+}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            var icon_1a980d45648a0973ce275d9ec2488562 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "flash",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_108be687d3c17eee15d6f4623c1f37d0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f7253169aaf9fa8ab57b82441eb693b4 = $(`<div id="html_f7253169aaf9fa8ab57b82441eb693b4" style="width: 100.0%; height: 100.0%;"><b>MCS 2 - #1</b><br>충전소: 기업은행 무교지점 앞 가로등형 충전소<br>시간대: 06시<br>시간창: 06:38~07:19<br>도착: 06:38<br>서비스: 06:38~07:19<br>발생횟수: 2<br>발생비율: 13.30%<br>목적함수 profit: 545.30</div>`)[0];
+                popup_108be687d3c17eee15d6f4623c1f37d0.setContent(html_f7253169aaf9fa8ab57b82441eb693b4);
+            
+        
+
+        marker_ef2b749021e3da80fdd9531d4b8a95e8.bindPopup(popup_108be687d3c17eee15d6f4623c1f37d0)
+        ;
+
+        
+    
+    
+            marker_ef2b749021e3da80fdd9531d4b8a95e8.bindTooltip(
+                `<div>
+                     MCS2-#1: 기업은행 무교지점 앞 가로등형 충전소 (06:38~07:19)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ef2b749021e3da80fdd9531d4b8a95e8.setIcon(icon_1a980d45648a0973ce275d9ec2488562);
+            
+    
+            var poly_line_1df17e9163c66da7d570d4e1aadb4be6 = L.polyline(
+                [[37.56896427, 127.0020909], [37.56762877, 126.9795662], [37.56896427, 127.0020909]],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.75, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_26a5d71b26bcff67f567784934b684d8);
+        
+    
+            poly_line_1df17e9163c66da7d570d4e1aadb4be6.bindTooltip(
+                `<div>
+                     MCS 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

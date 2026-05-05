@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_0558c45f97e6b2d8aa23d16c6b1370ed {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 980px;
+        max-height: 430px;
+        overflow-y: auto;
+        background-color: white;
+        z-index: 9999;
+        border: 2px solid #444;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 12px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.35);
+    ">
+        <h3 style="margin-top: 0;">Vehicle Schedule & Utilization</h3>
+
+        <h4>1. Vehicle Utilization</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Main route</th>
+                    <th>Weight utilization</th>
+                    <th>Charge utilization</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td><b>Vehicle 0</b></td>
+                <td>Depot -> C4 -> C2 -> Depot</td>
+                <td>3.0 / 6.0
+                    (50.0%)</td>
+                <td>11.0 / 12.0
+                    (91.7%)</td>
+            </tr>
+            
+            <tr>
+                <td><b>Vehicle 1</b></td>
+                <td>Depot -> C1 -> C3 -> Depot</td>
+                <td>6.0 / 6.0
+                    (100.0%)</td>
+                <td>9.0 / 12.0
+                    (75.0%)</td>
+            </tr>
+            
+            </tbody>
+        </table>
+
+        <h4>2. Vehicle Schedule</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Order</th>
+                    <th>Node</th>
+                    <th>Type</th>
+                    <th>Arrival</th>
+                    <th>Service</th>
+                    <th>Delivery tour</th>
+                    <th>Departure</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>0</td>
+                    <td>Depot</td>
+                    <td>Depot start</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>1</td>
+                    <td>C4</td>
+                    <td>Charging customer</td>
+                    <td>25.0 min</td>
+                    <td>13.0 min</td>
+                    <td>0.0 min</td>
+                    <td>38.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>2</td>
+                    <td>C2</td>
+                    <td>Charging customer</td>
+                    <td>150.0 min</td>
+                    <td>15.0 min</td>
+                    <td>7.4 min</td>
+                    <td>172.4 min</td>
+                    <td>Delivery: C2 -> S1 -> C2</td>
+                </tr>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>3</td>
+                    <td>Depot</td>
+                    <td>Depot return</td>
+                    <td>360.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>0</td>
+                    <td>Depot</td>
+                    <td>Depot start</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>1</td>
+                    <td>C1</td>
+                    <td>Charging customer</td>
+                    <td>10.0 min</td>
+                    <td>12.0 min</td>
+                    <td>8.9 min</td>
+                    <td>30.9 min</td>
+                    <td>Delivery: C1 -> S0 -> C1</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>2</td>
+                    <td>C3</td>
+                    <td>Charging customer</td>
+                    <td>160.0 min</td>
+                    <td>10.0 min</td>
+                    <td>12.2 min</td>
+                    <td>182.2 min</td>
+                    <td>Delivery: C3 -> S2 -> C3</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>3</td>
+                    <td>Depot</td>
+                    <td>Depot return</td>
+                    <td>360.0 min</td>
+                    <td>0.0 min</td>
+                    <td>0.0 min</td>
+                    <td>-</td>
+                    <td></td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <h4>3. Satellite Delivery Tours</h4>
+        <table style="width:100%; border-collapse: collapse;" border="1">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>Vehicle</th>
+                    <th>Hub</th>
+                    <th>Tour</th>
+                    <th>Weight</th>
+                    <th>Distance</th>
+                    <th>Travel time</th>
+                    <th>Service time</th>
+                    <th>Total time</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>V0</td>
+                    <td>C2</td>
+                    <td>C2 -> S1 -> C2</td>
+                    <td>3.0</td>
+                    <td>0.91 km</td>
+                    <td>1.4 min</td>
+                    <td>6.0 min</td>
+                    <td>7.4 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>C1</td>
+                    <td>C1 -> S0 -> C1</td>
+                    <td>2.0</td>
+                    <td>2.16 km</td>
+                    <td>4.9 min</td>
+                    <td>4.0 min</td>
+                    <td>8.9 min</td>
+                </tr>
+                
+                <tr>
+                    <td>V1</td>
+                    <td>C3</td>
+                    <td>C3 -> S2 -> C3</td>
+                    <td>4.0</td>
+                    <td>2.90 km</td>
+                    <td>4.2 min</td>
+                    <td>8.0 min</td>
+                    <td>12.2 min</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <p style="margin-bottom:0;">
+            <b>Legend:</b>
+            red = depot,
+            blue = charging customer,
+            lime = delivery satellite,
+            solid line = main vehicle route,
+            dashed line = satellite delivery tour.
+        </p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_0558c45f97e6b2d8aa23d16c6b1370ed" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_0558c45f97e6b2d8aa23d16c6b1370ed = L.map(
+                "map_0558c45f97e6b2d8aa23d16c6b1370ed",
+                {
+                    center: [37.5652625, 126.98150000000001],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_60eea5276f7562b54b99b57acba59ea7 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_60eea5276f7562b54b99b57acba59ea7.addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var marker_1b7c790d9b5b6edd55f3aa3801d423a7 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 5000,
+}
+            ).addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var icon_c7b3e55fd773674deece06e3536ec00e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7524806da74eef1aaf9bf74ed42fa425 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_86fda44dfc37f7cb07147b12ee28b447 = $(`<div id="html_86fda44dfc37f7cb07147b12ee28b447" style="width: 100.0%; height: 100.0%;"><b>Depot</b></div>`)[0];
+                popup_7524806da74eef1aaf9bf74ed42fa425.setContent(html_86fda44dfc37f7cb07147b12ee28b447);
+            
+        
+
+        marker_1b7c790d9b5b6edd55f3aa3801d423a7.bindPopup(popup_7524806da74eef1aaf9bf74ed42fa425)
+        ;
+
+        
+    
+    
+            marker_1b7c790d9b5b6edd55f3aa3801d423a7.bindTooltip(
+                `<div>
+                     Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1b7c790d9b5b6edd55f3aa3801d423a7.setIcon(icon_c7b3e55fd773674deece06e3536ec00e);
+            
+    
+            var feature_group_45a273521173cadca8a312ed273e4e69 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_6af535870a18e797865cd6e34969f719 = L.marker(
+                [37.5729, 126.9769],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_45a273521173cadca8a312ed273e4e69);
+        
+    
+            var icon_f1ff1ee8e27249ed9fa91b4d8a0b3fe3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ec34fa80eeefd3a3ad6fa30e410b934a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c6a2fa9ae315efbce4a4f5fa492a8b87 = $(`<div id="html_c6a2fa9ae315efbce4a4f5fa492a8b87" style="width: 100.0%; height: 100.0%;"><b>Customer C1</b><br>Type: EV charging<br>Delivery satellites handled here: S0</div>`)[0];
+                popup_ec34fa80eeefd3a3ad6fa30e410b934a.setContent(html_c6a2fa9ae315efbce4a4f5fa492a8b87);
+            
+        
+
+        marker_6af535870a18e797865cd6e34969f719.bindPopup(popup_ec34fa80eeefd3a3ad6fa30e410b934a)
+        ;
+
+        
+    
+    
+            marker_6af535870a18e797865cd6e34969f719.bindTooltip(
+                `<div>
+                     C1 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6af535870a18e797865cd6e34969f719.setIcon(icon_f1ff1ee8e27249ed9fa91b4d8a0b3fe3);
+            
+    
+            var marker_be00a99f026cc34710e56d3d869642a5 = L.marker(
+                [37.5663, 126.99],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_45a273521173cadca8a312ed273e4e69);
+        
+    
+            var icon_07f914084da28185bc9a0c0315a46626 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3bd01a74c7cfcf7862c08c338f27a22c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5ca11a6bbb727d7854beb5709f597f55 = $(`<div id="html_5ca11a6bbb727d7854beb5709f597f55" style="width: 100.0%; height: 100.0%;"><b>Customer C2</b><br>Type: EV charging<br>Delivery satellites handled here: S1</div>`)[0];
+                popup_3bd01a74c7cfcf7862c08c338f27a22c.setContent(html_5ca11a6bbb727d7854beb5709f597f55);
+            
+        
+
+        marker_be00a99f026cc34710e56d3d869642a5.bindPopup(popup_3bd01a74c7cfcf7862c08c338f27a22c)
+        ;
+
+        
+    
+    
+            marker_be00a99f026cc34710e56d3d869642a5.bindTooltip(
+                `<div>
+                     C2 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_be00a99f026cc34710e56d3d869642a5.setIcon(icon_07f914084da28185bc9a0c0315a46626);
+            
+    
+            var marker_c9c863b92f685c50872074a92e0163dc = L.marker(
+                [37.5547, 126.9706],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_45a273521173cadca8a312ed273e4e69);
+        
+    
+            var icon_dac320e6fcf56b984a2458d0b3cb2b6f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b0ad6b6b70ef3c6e5e4ace26ec0029c3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3eaf16ba96d3a2651284872da7d1b4d4 = $(`<div id="html_3eaf16ba96d3a2651284872da7d1b4d4" style="width: 100.0%; height: 100.0%;"><b>Customer C3</b><br>Type: EV charging<br>Delivery satellites handled here: S2</div>`)[0];
+                popup_b0ad6b6b70ef3c6e5e4ace26ec0029c3.setContent(html_3eaf16ba96d3a2651284872da7d1b4d4);
+            
+        
+
+        marker_c9c863b92f685c50872074a92e0163dc.bindPopup(popup_b0ad6b6b70ef3c6e5e4ace26ec0029c3)
+        ;
+
+        
+    
+    
+            marker_c9c863b92f685c50872074a92e0163dc.bindTooltip(
+                `<div>
+                     C3 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c9c863b92f685c50872074a92e0163dc.setIcon(icon_dac320e6fcf56b984a2458d0b3cb2b6f);
+            
+    
+            var marker_5cca3909a1c5e8e2c199dfde1f4150ad = L.marker(
+                [37.57, 126.992],
+                {
+  "zIndexOffset": 3500,
+}
+            ).addTo(feature_group_45a273521173cadca8a312ed273e4e69);
+        
+    
+            var icon_52c8e222fc3ddcc1adb080aef8e59f3a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "bolt",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_17ca6cf97d6337527d054ec80b1e079e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e020c68ec8811a26bc7edf96f3795916 = $(`<div id="html_e020c68ec8811a26bc7edf96f3795916" style="width: 100.0%; height: 100.0%;"><b>Customer C4</b><br>Type: EV charging<br>Delivery satellites handled here: None</div>`)[0];
+                popup_17ca6cf97d6337527d054ec80b1e079e.setContent(html_e020c68ec8811a26bc7edf96f3795916);
+            
+        
+
+        marker_5cca3909a1c5e8e2c199dfde1f4150ad.bindPopup(popup_17ca6cf97d6337527d054ec80b1e079e)
+        ;
+
+        
+    
+    
+            marker_5cca3909a1c5e8e2c199dfde1f4150ad.bindTooltip(
+                `<div>
+                     C4 charging
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5cca3909a1c5e8e2c199dfde1f4150ad.setIcon(icon_52c8e222fc3ddcc1adb080aef8e59f3a);
+            
+    
+            feature_group_45a273521173cadca8a312ed273e4e69.addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var feature_group_f472b960a7dcf11b27e22848f7a909ce = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_111e70649ec26da6714696f72c553362 = L.polyline(
+                [[37.567005, 126.977993], [37.567002, 126.977601], [37.567001, 126.977371], [37.567002, 126.977312], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.568967, 126.977248], [37.568989, 126.977269], [37.569102, 126.977462], [37.569098, 126.977504], [37.569091, 126.977578], [37.569092, 126.977597], [37.569072, 126.977886], [37.568985, 126.979141], [37.568974, 126.979282], [37.568962, 126.979404], [37.568932, 126.979813], [37.568917, 126.980059], [37.568838, 126.981109], [37.568789, 126.98205], [37.568763, 126.982433], [37.568755, 126.982527], [37.568736, 126.982765], [37.568697, 126.982983], [37.568553, 126.98382], [37.568358, 126.984882], [37.568204, 126.98562], [37.568133, 126.986021], [37.568015, 126.986634], [37.568008, 126.987151], [37.567991, 126.987545], [37.567987, 126.987743], [37.56798, 126.988109], [37.567964, 126.989024], [37.568004, 126.989584], [37.568038, 126.990152], [37.56804, 126.990175], [37.568077, 126.990931], [37.568181, 126.992437], [37.568554, 126.992375], [37.569109, 126.992265], [37.56928, 126.99225], [37.569582, 126.992236], [37.569852, 126.992223], [37.569996, 126.992216], [37.569998, 126.992]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            poly_line_111e70649ec26da6714696f72c553362.bindTooltip(
+                `<div>
+                     Vehicle 0: Depot -> C4 (1.87 km, 2.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_82534249800a0a2f6b797d24d77f7a53 = L.polyline(
+                [[37.569998, 126.992], [37.569996, 126.992216], [37.570289, 126.992194], [37.570326, 126.992188], [37.570362, 126.992183], [37.570405, 126.992167], [37.570418, 126.992167], [37.570436, 126.992167], [37.570471, 126.992162], [37.570517, 126.992157], [37.570507, 126.991949], [37.570472, 126.991433], [37.570427, 126.990534], [37.5704, 126.989738], [37.570384, 126.989459], [37.570348, 126.988833], [37.570345, 126.988798], [37.570328, 126.988583], [37.570305, 126.988168], [37.570297, 126.987842], [37.570288, 126.987638], [37.570248, 126.987639], [37.570207, 126.987639], [37.570169, 126.98764], [37.5701, 126.987639], [37.56973, 126.98763], [37.569615, 126.987627], [37.569385, 126.987622], [37.569165, 126.987618], [37.568816, 126.987592], [37.568307, 126.987555], [37.568241, 126.987551], [37.568053, 126.987547], [37.567991, 126.987545], [37.567987, 126.987743], [37.56798, 126.988109], [37.567964, 126.989024], [37.568004, 126.989584], [37.568038, 126.990152], [37.56804, 126.990175], [37.568077, 126.990931], [37.567625, 126.990881], [37.567287, 126.990844], [37.567263, 126.990844], [37.566819, 126.990849], [37.566339, 126.990888], [37.566292, 126.990001]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            poly_line_82534249800a0a2f6b797d24d77f7a53.bindTooltip(
+                `<div>
+                     Vehicle 0: C4 -> C2 (1.30 km, 2.2 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_18467f1fd6abe3dda49698c563e8c342 = L.polyline(
+                [[37.566292, 126.990001], [37.566279, 126.989744], [37.56628, 126.989704], [37.566239, 126.988417], [37.566226, 126.987946], [37.566224, 126.98788], [37.566218, 126.987701], [37.566216, 126.98751], [37.566209, 126.98734], [37.566205, 126.987232], [37.56615, 126.985746], [37.566107, 126.984481], [37.56609, 126.983536], [37.566056, 126.982945], [37.566052, 126.982755], [37.566053, 126.982584], [37.566041, 126.982296], [37.56604, 126.982087], [37.566029, 126.981466], [37.566013, 126.980623], [37.566011, 126.979613], [37.56601, 126.978978], [37.566107, 126.979033], [37.566175, 126.979096], [37.566246, 126.979142], [37.566364, 126.979148], [37.566899, 126.979196], [37.566998, 126.979198], [37.567007, 126.978164], [37.567005, 126.977993]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            poly_line_18467f1fd6abe3dda49698c563e8c342.bindTooltip(
+                `<div>
+                     Vehicle 0: C2 -> Depot (1.19 km, 1.7 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_6d73e63b11b9eed7de5689cd43a73e4f = L.polyline(
+                [[37.566292, 126.990001], [37.566279, 126.989744], [37.566183, 126.989768], [37.565806, 126.989815], [37.56479, 126.989963], [37.564698, 126.990651], [37.564504, 126.991377], [37.56449, 126.991429], [37.564473, 126.991582], [37.564401, 126.99222], [37.56436, 126.992589], [37.56437, 126.992746], [37.564379, 126.992879], [37.564998, 126.992802], [37.565142, 126.992784], [37.565519, 126.992735]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            poly_line_6d73e63b11b9eed7de5689cd43a73e4f.bindTooltip(
+                `<div>
+                     V0 delivery at C2: C2 -> S1 (0.58 km, 0.9 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_1781008480d88b60c525f82f7b4b22bb = L.polyline(
+                [[37.565519, 126.992735], [37.56588, 126.992688], [37.565964, 126.99268], [37.566263, 126.992651], [37.566302, 126.992646], [37.566429, 126.992626], [37.566393, 126.992006], [37.566339, 126.990888], [37.566292, 126.990001]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            poly_line_1781008480d88b60c525f82f7b4b22bb.bindTooltip(
+                `<div>
+                     V0 delivery at C2: S1 -> C2 (0.33 km, 0.5 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_5d2352b0f540cba4ecbfab2770b6d68c = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            var div_icon_c4d351e117ab97dfc5b4e098785d2594 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        0\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_059ecc9167124b11355bc5eb31dc0cde = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_520d7c35ff2daeb486cad00f82077083 = $(`<div id="html_520d7c35ff2daeb486cad00f82077083" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 0<br>Node: Depot<br>Type: Depot start<br>Arrival: 0.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: 0.0 min<br></div>`)[0];
+                popup_059ecc9167124b11355bc5eb31dc0cde.setContent(html_520d7c35ff2daeb486cad00f82077083);
+            
+        
+
+        marker_5d2352b0f540cba4ecbfab2770b6d68c.bindPopup(popup_059ecc9167124b11355bc5eb31dc0cde)
+        ;
+
+        
+    
+    
+            marker_5d2352b0f540cba4ecbfab2770b6d68c.bindTooltip(
+                `<div>
+                     V0-0-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5d2352b0f540cba4ecbfab2770b6d68c.setIcon(div_icon_c4d351e117ab97dfc5b4e098785d2594);
+            
+    
+            var marker_f30da0ebb68357e8c15a08af0be80448 = L.marker(
+                [37.57, 126.992],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            var div_icon_b37d2b6bc92d6691ec6d41cfc78a00fe = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        1\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_59601fc5a787f6ec6726dfccf6e87f50 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a00a671caaaec0cca523130ede851b8d = $(`<div id="html_a00a671caaaec0cca523130ede851b8d" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 1<br>Node: C4<br>Type: Charging customer<br>Arrival: 25.0 min<br>Service: 13.0 min<br>Delivery tour: 0.0 min<br>Departure: 38.0 min<br></div>`)[0];
+                popup_59601fc5a787f6ec6726dfccf6e87f50.setContent(html_a00a671caaaec0cca523130ede851b8d);
+            
+        
+
+        marker_f30da0ebb68357e8c15a08af0be80448.bindPopup(popup_59601fc5a787f6ec6726dfccf6e87f50)
+        ;
+
+        
+    
+    
+            marker_f30da0ebb68357e8c15a08af0be80448.bindTooltip(
+                `<div>
+                     V0-1-C4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f30da0ebb68357e8c15a08af0be80448.setIcon(div_icon_b37d2b6bc92d6691ec6d41cfc78a00fe);
+            
+    
+            var marker_8b7606c8d647f3c8239a927f5b7248a5 = L.marker(
+                [37.5663, 126.99],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            var div_icon_0cbfd14020a71a64d353b731ed6c48a0 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        2\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_09b3d8e3acb28a2ea6ccf7b24ab327ba = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1526f694ed866dc81ebd51f5b2bb56a4 = $(`<div id="html_1526f694ed866dc81ebd51f5b2bb56a4" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 2<br>Node: C2<br>Type: Charging customer<br>Arrival: 150.0 min<br>Service: 15.0 min<br>Delivery tour: 7.4 min<br>Departure: 172.4 min<br>Delivery: C2 -> S1 -> C2</div>`)[0];
+                popup_09b3d8e3acb28a2ea6ccf7b24ab327ba.setContent(html_1526f694ed866dc81ebd51f5b2bb56a4);
+            
+        
+
+        marker_8b7606c8d647f3c8239a927f5b7248a5.bindPopup(popup_09b3d8e3acb28a2ea6ccf7b24ab327ba)
+        ;
+
+        
+    
+    
+            marker_8b7606c8d647f3c8239a927f5b7248a5.bindTooltip(
+                `<div>
+                     V0-2-C2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8b7606c8d647f3c8239a927f5b7248a5.setIcon(div_icon_0cbfd14020a71a64d353b731ed6c48a0);
+            
+    
+            var marker_d9a47730e00bce3982f29524ba94ee31 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_f472b960a7dcf11b27e22848f7a909ce);
+        
+    
+            var div_icon_01965304e119720dc2a4cee88e64ece7 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: purple;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        R\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_2ba8bc52f71cfc2d565f7a3c07b78531 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e920ca4c75fa8f114b0066984c0f3378 = $(`<div id="html_e920ca4c75fa8f114b0066984c0f3378" style="width: 100.0%; height: 100.0%;"><b>Vehicle 0</b><br>Order: 3<br>Node: Depot<br>Type: Depot return<br>Arrival: 360.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: -<br></div>`)[0];
+                popup_2ba8bc52f71cfc2d565f7a3c07b78531.setContent(html_e920ca4c75fa8f114b0066984c0f3378);
+            
+        
+
+        marker_d9a47730e00bce3982f29524ba94ee31.bindPopup(popup_2ba8bc52f71cfc2d565f7a3c07b78531)
+        ;
+
+        
+    
+    
+            marker_d9a47730e00bce3982f29524ba94ee31.bindTooltip(
+                `<div>
+                     V0-3-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d9a47730e00bce3982f29524ba94ee31.setIcon(div_icon_01965304e119720dc2a4cee88e64ece7);
+            
+    
+            feature_group_f472b960a7dcf11b27e22848f7a909ce.addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var feature_group_37b38f1334fbb69e9bfff3c66b654f48 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_e70d1430790303e839cbf818f5c876c0 = L.polyline(
+                [[37.567005, 126.977993], [37.567002, 126.977601], [37.567001, 126.977371], [37.567002, 126.977312], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568884, 126.97722], [37.569406, 126.977216], [37.569612, 126.977214], [37.569818, 126.97721], [37.569995, 126.977209], [37.570049, 126.977208], [37.57014, 126.977213], [37.5702, 126.977218], [37.570242, 126.977222], [37.57028, 126.977227], [37.570412, 126.977248], [37.570467, 126.977253], [37.570486, 126.977254], [37.571439, 126.97731], [37.571599, 126.97732], [37.572586, 126.97728], [37.572722, 126.977274], [37.573125, 126.977258], [37.574121, 126.977218], [37.574446, 126.977205], [37.574934, 126.977185], [37.575064, 126.97718], [37.575114, 126.977178], [37.57519, 126.977177], [37.575281, 126.977172], [37.575257, 126.977062], [37.575161, 126.977068], [37.575063, 126.977076], [37.574933, 126.977078], [37.57489, 126.977079], [37.573541, 126.977116], [37.572904, 126.977133]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_e70d1430790303e839cbf818f5c876c0.bindTooltip(
+                `<div>
+                     Vehicle 1: Depot -> C1 (1.26 km, 2.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_38f8bbb77c7171f64f5f60da710920ec = L.polyline(
+                [[37.572904, 126.977133], [37.572586, 126.977142], [37.571691, 126.977166], [37.571413, 126.977174], [37.570489, 126.977095], [37.570413, 126.977088], [37.570354, 126.977083], [37.57028, 126.977076], [37.570242, 126.977073], [37.570197, 126.97707], [37.570137, 126.977065], [37.570047, 126.977058], [37.569997, 126.977054], [37.569634, 126.977028], [37.569052, 126.977035], [37.568406, 126.977042], [37.567349, 126.977101], [37.567142, 126.977109], [37.566869, 126.977114], [37.566637, 126.977117], [37.565241, 126.977102], [37.564924, 126.977084], [37.564756, 126.97707], [37.564642, 126.977056], [37.564455, 126.976985], [37.564255, 126.976748], [37.564232, 126.976721], [37.564171, 126.976647], [37.564129, 126.976579], [37.564069, 126.976483], [37.563806, 126.976007], [37.563745, 126.97586], [37.563667, 126.975672], [37.563529, 126.975342], [37.563351, 126.974915], [37.563322, 126.974835], [37.563068, 126.974139], [37.563052, 126.974076], [37.562855, 126.973243], [37.562821, 126.973099], [37.562678, 126.972495], [37.562649, 126.972372], [37.562634, 126.971964], [37.562524, 126.971447], [37.562225, 126.970141], [37.562185, 126.969968], [37.56217, 126.969903], [37.562122, 126.969675], [37.562085, 126.969525], [37.561893, 126.968721], [37.56186, 126.968558], [37.561843, 126.968492], [37.561759, 126.968148], [37.561696, 126.967885], [37.561573, 126.967443], [37.56142, 126.967537], [37.561341, 126.967577], [37.560982, 126.967759], [37.559881, 126.968313], [37.559674, 126.968418], [37.55956, 126.968485], [37.559477, 126.968547], [37.559432, 126.968592], [37.559304, 126.968726], [37.559192, 126.968873], [37.559103, 126.968973], [37.558952, 126.969128], [37.55886, 126.969205], [37.558735, 126.969305], [37.55863, 126.969327], [37.558352, 126.969313], [37.558181, 126.969304], [37.558051, 126.969217], [37.557504, 126.969087], [37.557363, 126.969039], [37.557336, 126.969035], [37.556944, 126.968971], [37.556214, 126.968937], [37.555684, 126.968932], [37.555428, 126.968926], [37.555294, 126.968923], [37.555276, 126.968923], [37.555196, 126.968923], [37.555168, 126.968927], [37.555113, 126.968933], [37.555052, 126.968941], [37.554877, 126.968955], [37.554584, 126.968988], [37.554547, 126.968992], [37.554355, 126.968998], [37.554044, 126.968994], [37.553929, 126.968994], [37.553481, 126.968995], [37.55313, 126.969001], [37.553017, 126.969011], [37.552793, 126.969066], [37.552669, 126.969101], [37.552684, 126.96919], [37.552986, 126.969112], [37.553241, 126.969098], [37.553425, 126.969087], [37.553712, 126.969089], [37.553852, 126.96928], [37.554111, 126.969632], [37.554298, 126.969809], [37.55439, 126.969841], [37.55469, 126.969835]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_38f8bbb77c7171f64f5f60da710920ec.bindTooltip(
+                `<div>
+                     Vehicle 1: C1 -> C3 (3.15 km, 4.1 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_b44f20140d8392d842792454bd884944 = L.polyline(
+                [[37.55469, 126.969835], [37.555004, 126.969828], [37.555072, 126.969812], [37.555158, 126.969756], [37.555217, 126.96967], [37.555281, 126.969511], [37.555296, 126.969396], [37.555289, 126.969129], [37.555288, 126.969112], [37.55536, 126.969114], [37.555425, 126.969115], [37.555462, 126.969116], [37.556203, 126.969136], [37.556501, 126.96916], [37.556859, 126.969162], [37.557261, 126.969193], [37.557302, 126.969196], [37.557327, 126.969198], [37.557591, 126.96926], [37.557827, 126.969315], [37.558048, 126.969366], [37.558181, 126.969304], [37.558352, 126.969313], [37.55863, 126.969327], [37.558735, 126.969305], [37.55886, 126.969205], [37.558952, 126.969128], [37.559103, 126.968973], [37.559192, 126.968873], [37.559304, 126.968726], [37.559432, 126.968592], [37.559477, 126.968547], [37.55956, 126.968485], [37.559674, 126.968418], [37.559881, 126.968313], [37.560982, 126.967759], [37.561341, 126.967577], [37.56142, 126.967537], [37.561443, 126.967644], [37.561544, 126.968127], [37.561567, 126.968238], [37.561705, 126.968805], [37.561719, 126.968859], [37.561912, 126.969652], [37.561947, 126.969799], [37.561986, 126.969959], [37.562373, 126.971547], [37.562483, 126.971999], [37.562484, 126.972003], [37.562649, 126.972372], [37.562678, 126.972495], [37.562821, 126.973099], [37.562855, 126.973243], [37.563052, 126.974076], [37.563068, 126.974139], [37.563322, 126.974835], [37.563351, 126.974915], [37.563529, 126.975342], [37.563667, 126.975672], [37.563745, 126.97586], [37.563806, 126.976007], [37.563857, 126.976234], [37.563966, 126.976587], [37.563985, 126.976742], [37.563996, 126.976829], [37.56396, 126.976972], [37.564171, 126.977038], [37.564462, 126.977128], [37.56462, 126.977182], [37.564655, 126.977194], [37.564706, 126.977204], [37.564844, 126.977209], [37.564928, 126.977213], [37.565103, 126.977221], [37.565242, 126.977226], [37.565403, 126.977227], [37.566596, 126.97723], [37.56688, 126.977239], [37.567003, 126.977241], [37.567249, 126.977238], [37.567899, 126.977231], [37.568014, 126.977231], [37.568029, 126.977296], [37.56804, 126.977347], [37.568128, 126.977752], [37.568189, 126.978025], [37.568165, 126.978309], [37.56756, 126.978261], [37.567007, 126.978164], [37.567005, 126.977993]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_b44f20140d8392d842792454bd884944.bindTooltip(
+                `<div>
+                     Vehicle 1: C3 -> Depot (2.42 km, 3.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_677a81ad759fb15fe205af4b2d6930bc = L.polyline(
+                [[37.572904, 126.977133], [37.572586, 126.977142], [37.571691, 126.977166], [37.571413, 126.977174], [37.570489, 126.977095], [37.570413, 126.977088], [37.570354, 126.977083], [37.57028, 126.977076], [37.570242, 126.977073], [37.570197, 126.97707], [37.570137, 126.977065], [37.570047, 126.977058], [37.569997, 126.977054], [37.569634, 126.977028], [37.569052, 126.977035], [37.569057, 126.976841], [37.56905, 126.97613], [37.569265, 126.975869], [37.569424, 126.975765], [37.569576, 126.97571], [37.569792, 126.97563], [37.570111, 126.975511], [37.570133, 126.97684], [37.570134, 126.9769], [37.570137, 126.977065], [37.57014, 126.977213], [37.57014, 126.977303], [37.570141, 126.977359], [37.570145, 126.977555], [37.570141, 126.978433], [37.570141, 126.979338], [37.570201, 126.979338], [37.570237, 126.979338], [37.570263, 126.979338], [37.570415, 126.979336], [37.571202, 126.979317], [37.571351, 126.979312], [37.571549, 126.979296], [37.571766, 126.979279], [37.572152, 126.97925], [37.572423, 126.979224], [37.572475, 126.980159], [37.572606, 126.980099], [37.573447, 126.979844], [37.573559, 126.979731], [37.573663, 126.980021]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_677a81ad759fb15fe205af4b2d6930bc.bindTooltip(
+                `<div>
+                     V1 delivery at C1: C1 -> S0 (1.47 km, 3.3 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_aacb778ff8b95eaa068a4fdcf6b13d8f = L.polyline(
+                [[37.573663, 126.980021], [37.573559, 126.979731], [37.573974, 126.979514], [37.574278, 126.979378], [37.574295, 126.979338], [37.574328, 126.978569], [37.57435, 126.97857], [37.574372, 126.978564], [37.574391, 126.97855], [37.574407, 126.978529], [37.574417, 126.978504], [37.57442, 126.978476], [37.574417, 126.978446], [37.574407, 126.978419], [37.574391, 126.978397], [37.57437, 126.978383], [37.574347, 126.978377], [37.574345, 126.978295], [37.574342, 126.978177], [37.574397, 126.977996], [37.574389, 126.977751], [37.574378, 126.97735], [37.574376, 126.977306], [37.574378, 126.97726], [37.574389, 126.977232], [37.574409, 126.977217], [37.574446, 126.977205], [37.574934, 126.977185], [37.575064, 126.97718], [37.575114, 126.977178], [37.57519, 126.977177], [37.575281, 126.977172], [37.575257, 126.977062], [37.575161, 126.977068], [37.575063, 126.977076], [37.574933, 126.977078], [37.57489, 126.977079], [37.573541, 126.977116], [37.572904, 126.977133]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_aacb778ff8b95eaa068a4fdcf6b13d8f.bindTooltip(
+                `<div>
+                     V1 delivery at C1: S0 -> C1 (0.69 km, 1.6 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_1d07d30f09ca5e9933361106e25738d7 = L.polyline(
+                [[37.55469, 126.969835], [37.555004, 126.969828], [37.555072, 126.969812], [37.555158, 126.969756], [37.555217, 126.96967], [37.555281, 126.969511], [37.555296, 126.969396], [37.555289, 126.969129], [37.555288, 126.969112], [37.55536, 126.969114], [37.555425, 126.969115], [37.555462, 126.969116], [37.556203, 126.969136], [37.556501, 126.96916], [37.556859, 126.969162], [37.557261, 126.969193], [37.557302, 126.969196], [37.557327, 126.969198], [37.557591, 126.96926], [37.557827, 126.969315], [37.558048, 126.969366], [37.558181, 126.969304], [37.558352, 126.969313], [37.55863, 126.969327], [37.558735, 126.969305], [37.55886, 126.969205], [37.558952, 126.969128], [37.559103, 126.968973], [37.559192, 126.968873], [37.559288, 126.969009], [37.559319, 126.969063], [37.55935, 126.969123], [37.559441, 126.969306], [37.55949, 126.96993], [37.559537, 126.970543], [37.55958, 126.9711], [37.559581, 126.971121], [37.559593, 126.971291], [37.559434, 126.971332], [37.559355, 126.971352], [37.558996, 126.971443], [37.558531, 126.971513], [37.558285, 126.971554], [37.557793, 126.971658], [37.557552, 126.971773], [37.557339, 126.971887], [37.557169, 126.972037], [37.556897, 126.972311], [37.556784, 126.972433], [37.556715, 126.972424], [37.556467, 126.972484], [37.556319, 126.97252], [37.556099, 126.972579], [37.555868, 126.972568], [37.555453, 126.972505], [37.554879, 126.972508], [37.554806, 126.972509], [37.554552, 126.972518], [37.554269, 126.972572], [37.553712, 126.972615], [37.553263, 126.972593], [37.552788, 126.97247], [37.552442, 126.972387]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_1d07d30f09ca5e9933361106e25738d7.bindTooltip(
+                `<div>
+                     V1 delivery at C3: C3 -> S2 (1.61 km, 2.2 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_fb2e63e70af30d3846d0a2cd4efd1324 = L.polyline(
+                [[37.552442, 126.972387], [37.552176, 126.972323], [37.55138, 126.972138], [37.551109, 126.972062], [37.55037, 126.971878], [37.549502, 126.971663], [37.549349, 126.971645], [37.549278, 126.971559], [37.549267, 126.971546], [37.549207, 126.971479], [37.549148, 126.971405], [37.548638, 126.97073], [37.54863, 126.970719], [37.5482, 126.970128], [37.54839, 126.970098], [37.548415, 126.970095], [37.548827, 126.970047], [37.549106, 126.970022], [37.549168, 126.970017], [37.549192, 126.970011], [37.549656, 126.969892], [37.549994, 126.969816], [37.55071, 126.969668], [37.550911, 126.969636], [37.55163, 126.969461], [37.552362, 126.969273], [37.552684, 126.96919], [37.552986, 126.969112], [37.553241, 126.969098], [37.553425, 126.969087], [37.553712, 126.969089], [37.553852, 126.96928], [37.554111, 126.969632], [37.554298, 126.969809], [37.55439, 126.969841], [37.55469, 126.969835]],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": "8, 8", "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            poly_line_fb2e63e70af30d3846d0a2cd4efd1324.bindTooltip(
+                `<div>
+                     V1 delivery at C3: S2 -> C3 (1.29 km, 2.0 min)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_23463c92befc6988882e6d5630b50226 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            var div_icon_02e202f3dc25fd7245439805a5f6f86b = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        0\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_f278338088ec9d21c5a216da843d0453 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0aefbd9f4a8d9aa9b925974717202358 = $(`<div id="html_0aefbd9f4a8d9aa9b925974717202358" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 0<br>Node: Depot<br>Type: Depot start<br>Arrival: 0.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: 0.0 min<br></div>`)[0];
+                popup_f278338088ec9d21c5a216da843d0453.setContent(html_0aefbd9f4a8d9aa9b925974717202358);
+            
+        
+
+        marker_23463c92befc6988882e6d5630b50226.bindPopup(popup_f278338088ec9d21c5a216da843d0453)
+        ;
+
+        
+    
+    
+            marker_23463c92befc6988882e6d5630b50226.bindTooltip(
+                `<div>
+                     V1-0-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_23463c92befc6988882e6d5630b50226.setIcon(div_icon_02e202f3dc25fd7245439805a5f6f86b);
+            
+    
+            var marker_ec0f34c1cebba5adbaee3b4f0ac22a49 = L.marker(
+                [37.5729, 126.9769],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            var div_icon_5a6dc6a7940654b2371360cea484454f = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        1\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_882fac4563cc68243acac148fb6f3d9d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_91d1538c904b111be7e9a76051232ab2 = $(`<div id="html_91d1538c904b111be7e9a76051232ab2" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 1<br>Node: C1<br>Type: Charging customer<br>Arrival: 10.0 min<br>Service: 12.0 min<br>Delivery tour: 8.9 min<br>Departure: 30.9 min<br>Delivery: C1 -> S0 -> C1</div>`)[0];
+                popup_882fac4563cc68243acac148fb6f3d9d.setContent(html_91d1538c904b111be7e9a76051232ab2);
+            
+        
+
+        marker_ec0f34c1cebba5adbaee3b4f0ac22a49.bindPopup(popup_882fac4563cc68243acac148fb6f3d9d)
+        ;
+
+        
+    
+    
+            marker_ec0f34c1cebba5adbaee3b4f0ac22a49.bindTooltip(
+                `<div>
+                     V1-1-C1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ec0f34c1cebba5adbaee3b4f0ac22a49.setIcon(div_icon_5a6dc6a7940654b2371360cea484454f);
+            
+    
+            var marker_fdc5f19a36bfa081ff1c3cd5ca6c0256 = L.marker(
+                [37.5547, 126.9706],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            var div_icon_a9d159e08bfa81fd6b5a943b599fb6f2 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        2\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_549805b15e0ae7d7c54bb7054c37266d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fe7bb2accd4ff21321199376deb57286 = $(`<div id="html_fe7bb2accd4ff21321199376deb57286" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 2<br>Node: C3<br>Type: Charging customer<br>Arrival: 160.0 min<br>Service: 10.0 min<br>Delivery tour: 12.2 min<br>Departure: 182.2 min<br>Delivery: C3 -> S2 -> C3</div>`)[0];
+                popup_549805b15e0ae7d7c54bb7054c37266d.setContent(html_fe7bb2accd4ff21321199376deb57286);
+            
+        
+
+        marker_fdc5f19a36bfa081ff1c3cd5ca6c0256.bindPopup(popup_549805b15e0ae7d7c54bb7054c37266d)
+        ;
+
+        
+    
+    
+            marker_fdc5f19a36bfa081ff1c3cd5ca6c0256.bindTooltip(
+                `<div>
+                     V1-2-C3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_fdc5f19a36bfa081ff1c3cd5ca6c0256.setIcon(div_icon_a9d159e08bfa81fd6b5a943b599fb6f2);
+            
+    
+            var marker_df2d12852954916ecaa9b7f65ce1d664 = L.marker(
+                [37.5665, 126.978],
+                {
+  "zIndexOffset": 4500,
+}
+            ).addTo(feature_group_37b38f1334fbb69e9bfff3c66b654f48);
+        
+    
+            var div_icon_16e8452f29f72c80596f25e4c2afb5f6 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"\n                        font-size: 12px;\n                        color: white;\n                        background: orange;\n                        border-radius: 50%;\n                        width: 28px;\n                        height: 28px;\n                        text-align: center;\n                        line-height: 28px;\n                        border: 2px solid white;\"\u003e\n                        R\n                    \u003c/div\u003e\n                    ",
+  "className": "empty",
+});
+        
+    
+        var popup_6d10bba869578615aee6679d445950e0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cab98e29732409ce4720156edf102846 = $(`<div id="html_cab98e29732409ce4720156edf102846" style="width: 100.0%; height: 100.0%;"><b>Vehicle 1</b><br>Order: 3<br>Node: Depot<br>Type: Depot return<br>Arrival: 360.0 min<br>Service: 0.0 min<br>Delivery tour: 0.0 min<br>Departure: -<br></div>`)[0];
+                popup_6d10bba869578615aee6679d445950e0.setContent(html_cab98e29732409ce4720156edf102846);
+            
+        
+
+        marker_df2d12852954916ecaa9b7f65ce1d664.bindPopup(popup_6d10bba869578615aee6679d445950e0)
+        ;
+
+        
+    
+    
+            marker_df2d12852954916ecaa9b7f65ce1d664.bindTooltip(
+                `<div>
+                     V1-3-Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_df2d12852954916ecaa9b7f65ce1d664.setIcon(div_icon_16e8452f29f72c80596f25e4c2afb5f6);
+            
+    
+            feature_group_37b38f1334fbb69e9bfff3c66b654f48.addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var feature_group_4ab27ceb80a2a376e21dfc72727f8ff2 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_5a36c8d63fec18a6b637eab048f5372e = L.circleMarker(
+                [37.5737, 126.98],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+        var popup_fa2b5c0007b15cda8385a440031019de = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4e16d000daa4df0323cd1b1630c4b921 = $(`<div id="html_4e16d000daa4df0323cd1b1630c4b921" style="width: 100.0%; height: 100.0%;"><b>Satellite S0</b><br>Type: delivery<br>Assignment: Vehicle V1, hub C1</div>`)[0];
+                popup_fa2b5c0007b15cda8385a440031019de.setContent(html_4e16d000daa4df0323cd1b1630c4b921);
+            
+        
+
+        circle_marker_5a36c8d63fec18a6b637eab048f5372e.bindPopup(popup_fa2b5c0007b15cda8385a440031019de)
+        ;
+
+        
+    
+    
+            circle_marker_5a36c8d63fec18a6b637eab048f5372e.bindTooltip(
+                `<div>
+                     S0 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_f3cbda44df33f2529c2ce2c0ff4e2ea5 = L.marker(
+                [37.5737, 126.98],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+            var div_icon_0d098dfb0bc2e09bcf9a2d25570438ec = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S0\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_f3cbda44df33f2529c2ce2c0ff4e2ea5.setIcon(div_icon_0d098dfb0bc2e09bcf9a2d25570438ec);
+            
+    
+            var circle_marker_07f79ce6baefaae3725628df95da5c23 = L.circleMarker(
+                [37.5655, 126.9925],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+        var popup_00bc523797489ad56bcf8be308679275 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3db146fa48554a0b200f6a5501834046 = $(`<div id="html_3db146fa48554a0b200f6a5501834046" style="width: 100.0%; height: 100.0%;"><b>Satellite S1</b><br>Type: delivery<br>Assignment: Vehicle V0, hub C2</div>`)[0];
+                popup_00bc523797489ad56bcf8be308679275.setContent(html_3db146fa48554a0b200f6a5501834046);
+            
+        
+
+        circle_marker_07f79ce6baefaae3725628df95da5c23.bindPopup(popup_00bc523797489ad56bcf8be308679275)
+        ;
+
+        
+    
+    
+            circle_marker_07f79ce6baefaae3725628df95da5c23.bindTooltip(
+                `<div>
+                     S1 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_338c839fa567145eb87daed4865dd55e = L.marker(
+                [37.5655, 126.9925],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+            var div_icon_e79080ee5c9cb7c53d5e41418898aeba = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S1\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_338c839fa567145eb87daed4865dd55e.setIcon(div_icon_e79080ee5c9cb7c53d5e41418898aeba);
+            
+    
+            var circle_marker_f5ff4ee8abe1f9f32b1a74e5c1b1a10e = L.circleMarker(
+                [37.5525, 126.972],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lime", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12, "stroke": true, "weight": 3}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+        var popup_227b384cebf0e8a8700f9751382db4d6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c4e1bbe8e2cb7c82b0012754900aaf28 = $(`<div id="html_c4e1bbe8e2cb7c82b0012754900aaf28" style="width: 100.0%; height: 100.0%;"><b>Satellite S2</b><br>Type: delivery<br>Assignment: Vehicle V1, hub C3</div>`)[0];
+                popup_227b384cebf0e8a8700f9751382db4d6.setContent(html_c4e1bbe8e2cb7c82b0012754900aaf28);
+            
+        
+
+        circle_marker_f5ff4ee8abe1f9f32b1a74e5c1b1a10e.bindPopup(popup_227b384cebf0e8a8700f9751382db4d6)
+        ;
+
+        
+    
+    
+            circle_marker_f5ff4ee8abe1f9f32b1a74e5c1b1a10e.bindTooltip(
+                `<div>
+                     S2 delivery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_92a800b8be44406eb5f65e1d70b9f90e = L.marker(
+                [37.5525, 126.972],
+                {
+  "zIndexOffset": 7000,
+}
+            ).addTo(feature_group_4ab27ceb80a2a376e21dfc72727f8ff2);
+        
+    
+            var div_icon_b73e9730e1412f13ba59f62f111cbacc = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12px;\n                    font-weight: bold;\n                    color: black;\n                    background: white;\n                    border: 1px solid black;\n                    border-radius: 4px;\n                    padding: 1px 4px;\n                    transform: translate(10px, -12px);\"\u003e\n                    S2\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_92a800b8be44406eb5f65e1d70b9f90e.setIcon(div_icon_b73e9730e1412f13ba59f62f111cbacc);
+            
+    
+            feature_group_4ab27ceb80a2a376e21dfc72727f8ff2.addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+        
+    
+            var layer_control_3b72929f415a47a5cb2a1b160428ae42_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_60eea5276f7562b54b99b57acba59ea7,
+                },
+                overlays :  {
+                    "Charging Customers" : feature_group_45a273521173cadca8a312ed273e4e69,
+                    "Vehicle 0" : feature_group_f472b960a7dcf11b27e22848f7a909ce,
+                    "Vehicle 1" : feature_group_37b38f1334fbb69e9bfff3c66b654f48,
+                    "Delivery Satellites" : feature_group_4ab27ceb80a2a376e21dfc72727f8ff2,
+                },
+            };
+            let layer_control_3b72929f415a47a5cb2a1b160428ae42 = L.control.layers(
+                layer_control_3b72929f415a47a5cb2a1b160428ae42_layers.base_layers,
+                layer_control_3b72929f415a47a5cb2a1b160428ae42_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_0558c45f97e6b2d8aa23d16c6b1370ed);
+
+        
+    
+            map_0558c45f97e6b2d8aa23d16c6b1370ed.fitBounds(
+                [[37.5665, 126.978], [37.5729, 126.9769], [37.5663, 126.99], [37.5547, 126.9706], [37.57, 126.992], [37.5737, 126.98], [37.5655, 126.9925], [37.5525, 126.972]],
+                {}
+            );
+        
+</script>
+</html>

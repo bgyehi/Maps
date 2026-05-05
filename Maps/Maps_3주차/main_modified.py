@@ -1,6 +1,6 @@
 from module_modified import load_instance_from_csv
 from milp_modified import milp_scheduling
-
+from milp_html import export_schedule_to_html
 
 JOBS_CSV = "jobs.csv"
 SETUP_CSV = "setup_times.csv"
@@ -37,3 +37,6 @@ if __name__ == "__main__":
     inst = load_instance_from_csv(JOBS_CSV, SETUP_CSV)
     result = milp_scheduling(inst, TIME_LIMIT)
     print_result(result)
+
+    html_path = export_schedule_to_html(result, "solution_result.html")
+    print(f"HTML saved to: {html_path.resolve()}")

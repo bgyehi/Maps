@@ -76,6 +76,7 @@ def milp_scheduling(_prob: Instance, time_limit=300):
     if result is None:
         raise RuntimeError("CPLEX가 해를 찾지 못했습니다.")
 
+
     MA = {k: [] for k in SM}
     for i in SJ:
         for k in SM:
