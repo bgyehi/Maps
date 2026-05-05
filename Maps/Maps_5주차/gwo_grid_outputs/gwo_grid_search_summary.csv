@@ -1,4 +1,0 @@
-﻿num_job,num_mch,ga_obj,ga_time,best_gwo_mean_obj,best_gwo_best_run_obj,best_gwo_pop_size,best_gwo_seed,ga_schedule_path,best_gwo_schedule_path
-10,2,4083,60.01797413825989,3907.6,3892,10,1000,gwo_grid_outputs\ga_schedule_job_10.png,gwo_grid_outputs\best_gwo_schedule_job_10.png
-50,2,141436,60.22176384925842,150131.7,133116,10,1005,gwo_grid_outputs\ga_schedule_job_50.png,gwo_grid_outputs\best_gwo_schedule_job_50.png
-100,2,694377,60.43551421165466,781857.5,707293,50,1005,gwo_grid_outputs\ga_schedule_job_100.png,gwo_grid_outputs\best_gwo_schedule_job_100.png
